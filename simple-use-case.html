@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LangRev - Simplified Planner Agent Flow</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mermaid/9.4.3/mermaid.min.js"></script>
+    <style>
+        .mermaid {
+            max-width: 100%;
+            margin: 0 auto;
+        }
+        .gradient-bg {
+            background: linear-gradient(135deg, #6366F1 0%, #A855F7 100%);
+        }
+        .component-card {
+            border-left: 4px solid #6366F1;
+        }
+        .llm-card {
+            border-left: 4px solid #22c55e;
+        }
+        .prompt-card {
+            background-color: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 0.5rem;
+            padding: 1rem;
+            font-family: monospace;
+            white-space: pre-wrap;
+            font-size: 0.875rem;
+            color: #334155;
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <header class="gradient-bg text-white py-8">
+        <div class="container mx-auto px-4">
+            <h1 class="text-4xl font-bold mb-2">Simplified Planner Agent Flow</h1>
+            <p class="text-xl">With LLM Interaction Points & Example Prompts</p>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-4 py-8">
+        <section class="mb-12">
+            <h2 class="text-3xl font-bold mb-6 text-center">Simplified E-commerce Query Flow</h2>
+            <div class="bg-white p-6 rounded-lg shadow-lg">
+                <pre class="mermaid">
+sequenceDiagram
+    participant User
+    participant Preprocessor as Query Preprocessor
+    participant PlannerLLM as Planner LLM
+    participant APIRegistry as API Registry
+    participant Executor as Executor Agent
+    
+    Note over User: Query: "Find me red Nike shoes under $100"
+    
+    User->>Preprocessor: Raw query
+    Preprocessor->>PlannerLLM: Normalized query
+    
+    Note over PlannerLLM: LLM CALL
+    
+    PlannerLLM->>APIRegistry: Request available APIs
+    APIRegistry->>PlannerLLM: Available API endpoints
+    
+    Note over PlannerLLM: LLM CALL
+    
+    PlannerLLM->>Executor: Execution Plan JSON
+    
+    Note over Executor: Executes API calls based on plan
+                </pre>
+            </div>
+        </section>
+
+        <section class="mb-12">
+            <h2 class="text-3xl font-bold mb-6">LLM Interaction Points</h2>
+            
+            <div class="grid md:grid-cols-2 gap-6 mb-10">
+                <div class="bg-white p-5 rounded-lg shadow llm-card">
+                    <h4 class="font-bold text-lg mb-2">LLM Call #1: Intent & Entity Extraction</h4>
+                    <p class="text-gray-700 mb-3">The first LLM call analyzes the query to determine intent and extract entities.</p>
+                    
+                    <h5 class="font-bold text-md mb-2 text-green-700">Example Prompt:</h5>
+                    <div class="prompt-card">
+You are an AI assistant that analyzes user queries to identify the intent and extract entities. 
+
+USER QUERY: "Find me red Nike shoes under $100"
+
+Extract the following information:
+1. Main intent of the query (e.g., product_search, order_tracking, customer_service)
+2. All relevant entities in the query (product types, attributes, constraints, etc.)
+
+Format your response as a JSON object with the following structure:
+{
+  "intent": string,
+  "confidence": number between 0 and 1,
+  "entities": {
+    entity_name: entity_value
+  }
+}
+                    </div>
+                    
+                    <h5 class="font-bold text-md mt-4 mb-2 text-green-700">Example LLM Response:</h5>
+                    <div class="prompt-card">
+{
+  "intent": "product_search",
+  "confidence": 0.98,
+  "entities": {
+    "product_type": "shoes",
+    "brand": "Nike",
+    "color": "red",
+    "price_max": 100
+  }
+}
+                    </div>
+                </div>
+                
+                <div class="bg-white p-5 rounded-lg shadow llm-card">
+                    <h4 class="font-bold text-lg mb-2">LLM Call #2: API Plan Generation</h4>
+                    <p class="text-gray-700 mb-3">The second LLM call creates an execution plan based on available APIs and extracted information.</p>
+                    
+                    <h5 class="font-bold text-md mb-2 text-green-700">Example Prompt:</h5>
+                    <div class="prompt-card">
+You are an AI assistant that creates API execution plans based on user intent and available API endpoints.
+
+USER INTENT AND ENTITIES:
+{
+  "intent": "product_search",
+  "entities": {
+    "product_type": "shoes",
+    "brand": "Nike",
+    "color": "red",
+    "price_max": 100
+  }
+}
+
+AVAILABLE API ENDPOINTS:
+1. GET /products/search - General product search with filtering
+   Parameters: category, brand, color, price_min, price_max, page, page_size
+   
+2. GET /products/{id} - Get details for a specific product
+   Parameters: id
+
+3. GET /brands/{brand}/products - Get products from a specific brand
+   Parameters: brand, category, page, page_size
+   
+4. GET /shipping/options - Get shipping options for products
+   Parameters: product_ids, location
+
+Create an execution plan that efficiently fulfills the user's request. The plan should:
+1. Use the most appropriate APIs
+2. Include all necessary parameters
+3. Define dependencies between API calls if needed
+4. Include fallback options in case of errors
+
+Format your response as a JSON object with the following structure:
+{
+  "api_calls": [
+    {
+      "endpoint": string,
+      "method": string,
+      "parameters": object,
+      "depends_on": string or null,
+      "expected_response": string
+    }
+  ],
+  "fallbacks": [
+    {
+      "if_failed": string,
+      "then_use": object
+    }
+  ],
+  "success_criteria": {
+    "condition": string
+  }
+}
+                    </div>
+                    
+                    <h5 class="font-bold text-md mt-4 mb-2 text-green-700">Example LLM Response:</h5>
+                    <div class="prompt-card">
+{
+  "api_calls": [
+    {
+      "endpoint": "/products/search",
+      "method": "GET",
+      "parameters": {
+        "category": "shoes",
+        "brand": "Nike",
+        "color": "red",
+        "price_max": 100,
+        "page": 1,
+        "page_size": 20
+      },
+      "depends_on": null,
+      "expected_response": "product_array"
+    }
+  ],
+  "fallbacks": [
+    {
+      "if_failed": "api_call_0",
+      "then_use": {
+        "endpoint": "/brands/Nike/products",
+        "method": "GET",
+        "parameters": {
+          "category": "shoes",
+          "page": 1,
+          "page_size": 20
+        }
+      }
+    }
+  ],
+  "success_criteria": {
+    "condition": "$.api_call_0.response.products.length > 0"
+  }
+}
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="mb-12 bg-white p-6 rounded-lg shadow-lg">
+            <h2 class="text-3xl font-bold mb-6">Simplified Planner Flow</h2>
+            
+            <div class="grid md:grid-cols-3 gap-6">
+                <div class="bg-indigo-50 p-5 rounded-lg">
+                    <div class="text-center mb-4">
+                        <span class="inline-block w-10 h-10 rounded-full bg-indigo-600 text-white text-xl font-bold flex items-center justify-center">1</span>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3 text-center">Preprocessing</h3>
+                    <p class="text-gray-700">
+                        The user query is normalized and cleaned up. Context from previous interactions may be added.
+                    </p>
+                    <div class="mt-4 p-3 bg-white rounded-lg text-sm">
+                        <p class="font-semibold">Input:</p>
+                        <p>"Find me red Nike shoes under $100"</p>
+                        <p class="font-semibold mt-2">Output:</p>
+                        <p>"red Nike shoes under $100"</p>
+                    </div>
+                </div>
+                
+                <div class="bg-green-50 p-5 rounded-lg">
+                    <div class="text-center mb-4">
+                        <span class="inline-block w-10 h-10 rounded-full bg-green-600 text-white text-xl font-bold flex items-center justify-center">2</span>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3 text-center">LLM Planning</h3>
+                    <p class="text-gray-700">
+                        The LLM analyzes the query, extracts intent and entities, and creates an execution plan.
+                    </p>
+                    <div class="mt-4 p-3 bg-white rounded-lg text-sm">
+                        <p class="font-semibold">Key Actions:</p>
+                        <ul class="list-disc ml-4 space-y-1">
+                            <li>Identify intent: product_search</li>
+                            <li>Extract entities: product_type, brand, etc.</li>
+                            <li>Match with available APIs</li>
+                            <li>Create structured execution plan</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="bg-amber-50 p-5 rounded-lg">
+                    <div class="text-center mb-4">
+                        <span class="inline-block w-10 h-10 rounded-full bg-amber-600 text-white text-xl font-bold flex items-center justify-center">3</span>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3 text-center">Execution</h3>
+                    <p class="text-gray-700">
+                        The Executor Agent receives the plan and makes the necessary API calls in sequence.
+                    </p>
+                    <div class="mt-4 p-3 bg-white rounded-lg text-sm">
+                        <p class="font-semibold">Actions:</p>
+                        <ul class="list-disc ml-4 space-y-1">
+                            <li>Call /products/search API</li>
+                            <li>Process API response</li>
+                            <li>Use fallbacks if needed</li>
+                            <li>Format data for Generator Agent</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="mb-12">
+            <h2 class="text-3xl font-bold mb-6">Key Benefits of This Approach</h2>
+            
+            <div class="grid md:grid-cols-2 gap-6">
+                <div class="bg-white p-5 rounded-lg shadow component-card">
+                    <h4 class="font-bold text-lg mb-2">Simplified Architecture</h4>
+                    <ul class="list-disc ml-5 mt-2 space-y-2 text-gray-700">
+                        <li>Just two main LLM calls instead of multiple specialized components</li>
+                        <li>Clearer flow that's easier to implement and debug</li>
+                        <li>Reduces latency by minimizing the number of processing steps</li>
+                        <li>More cost-effective with fewer LLM calls</li>
+                    </ul>
+                </div>
+                
+                <div class="bg-white p-5 rounded-lg shadow component-card">
+                    <h4 class="font-bold text-lg mb-2">Powerful LLM Prompting</h4>
+                    <ul class="list-disc ml-5 mt-2 space-y-2 text-gray-700">
+                        <li>Leverages LLM's inherent understanding of language and intent</li>
+                        <li>Clear, structured prompts ensure consistent outputs</li>
+                        <li>JSON formatting makes integration with other components seamless</li>
+                        <li>System can improve by refining prompts rather than rewriting code</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="bg-gray-800 text-white py-6">
+        <div class="container mx-auto px-4 text-center">
+            <p>LangRev - Automated API Integration System</p>
+            <p class="text-gray-400 text-sm mt-2">© 2025 LangRev</p>
+        </div>
+    </footer>
+
+    <script>
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: 'default',
+            securityLevel: 'loose',
+            flowchart: {
+                useMaxWidth: false,
+                htmlLabels: true
+            }
+        });
+    </script>
+</body>
+</html>
