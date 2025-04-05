@@ -3,417 +3,179 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Learn HTML - Beginner's Guide</title>
+    <title>LangRev - Automated API Integration System</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mermaid/9.4.3/mermaid.min.js"></script>
     <style>
-        :root {
-            --primary-color: #3498db;
-            --secondary-color: #2ecc71;
-            --accent-color: #f39c12;
-            --dark-color: #2c3e50;
-            --light-color: #ecf0f1;
-            --text-color: #333;
-            --code-bg: #f8f9fa;
-        }
-        
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            line-height: 1.6;
-            margin: 0;
-            padding: 0;
-            color: var(--text-color);
-            background-color: var(--light-color);
-        }
-        
-        header {
-            background-color: var(--primary-color);
-            color: white;
-            padding: 2rem 0;
-            text-align: center;
-        }
-        
-        .container {
-            max-width: 1000px;
+        .mermaid {
+            max-width: 100%;
             margin: 0 auto;
-            padding: 20px;
         }
-        
-        h1, h2, h3 {
-            color: var(--dark-color);
-        }
-        
-        h1 {
-            margin-bottom: 0.5rem;
-        }
-        
-        .tagline {
-            font-size: 1.2rem;
-            opacity: 0.9;
-        }
-        
-        .section {
-            background-color: white;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            padding: 25px;
-            margin-bottom: 30px;
-        }
-        
-        .code-block {
-            background-color: var(--code-bg);
-            border-left: 4px solid var(--primary-color);
-            padding: 15px;
-            margin: 15px 0;
-            border-radius: 0 5px 5px 0;
-            overflow-x: auto;
-            font-family: 'Courier New', Courier, monospace;
-        }
-        
-        .example-container {
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            margin: 20px 0;
-            overflow: hidden;
-        }
-        
-        .example-preview {
-            padding: 15px;
-            background-color: white;
-            border-bottom: 1px solid #ddd;
-        }
-        
-        .example-code {
-            background-color: var(--code-bg);
-            padding: 15px;
-            margin: 0;
-            font-family: 'Courier New', Courier, monospace;
-        }
-        
-        .tabs {
-            display: flex;
-            background-color: #f1f1f1;
-        }
-        
-        .tab {
-            padding: 10px 15px;
-            cursor: pointer;
-            border: none;
-            background: #f1f1f1;
-        }
-        
-        .tab.active {
-            background-color: var(--primary-color);
-            color: white;
-        }
-        
-        .topic-card {
-            background-color: white;
-            border-radius: 8px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-            padding: 20px;
-            margin-bottom: 20px;
-            border-top: 4px solid var(--primary-color);
-        }
-        
-        .tip {
-            background-color: rgba(46, 204, 113, 0.1);
-            border-left: 4px solid var(--secondary-color);
-            padding: 15px;
-            margin: 15px 0;
-            border-radius: 0 5px 5px 0;
-        }
-        
-        .warning {
-            background-color: rgba(243, 156, 18, 0.1);
-            border-left: 4px solid var(--accent-color);
-            padding: 15px;
-            margin: 15px 0;
-            border-radius: 0 5px 5px 0;
-        }
-        
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin: 20px 0;
-        }
-        
-        th, td {
-            padding: 12px 15px;
-            text-align: left;
-            border-bottom: 1px solid #ddd;
-        }
-        
-        th {
-            background-color: var(--primary-color);
-            color: white;
-        }
-        
-        tr:nth-child(even) {
-            background-color: #f9f9f9;
-        }
-        
-        footer {
-            background-color: var(--dark-color);
-            color: white;
-            text-align: center;
-            padding: 20px 0;
-            margin-top: 40px;
+        .gradient-bg {
+            background: linear-gradient(135deg, #6366F1 0%, #A855F7 100%);
         }
     </style>
 </head>
-<body>
-    <header>
-        <div class="container">
-            <h1>Learn HTML</h1>
-            <p class="tagline">A Beginner's Guide to HTML with Examples</p>
+<body class="bg-gray-50">
+    <header class="gradient-bg text-white py-8">
+        <div class="container mx-auto px-4">
+            <h1 class="text-4xl font-bold mb-2">LangRev</h1>
+            <p class="text-xl">Automated API-to-Chatbot System</p>
         </div>
     </header>
+
+    <main class="container mx-auto px-4 py-8">
+        <section class="mb-12">
+            <h2 class="text-3xl font-bold mb-6 text-center">System Architecture</h2>
+            <div class="bg-white p-6 rounded-lg shadow-lg">
+                <pre class="mermaid">
+flowchart TB
+    subgraph "Inputs"
+        UserQuery([User Query])
+        APISpecs[(API Specifications)]
+        Context[(Conversation Context)]
+    end
     
-    <div class="container">
-        <div class="section">
-            <h2>Welcome to HTML Learning</h2>
-            <p>HTML (HyperText Markup Language) is the standard markup language for creating web pages. It describes the structure of web pages using markup elements that are represented by tags.</p>
-            <p>This guide will help you learn HTML basics through examples and practice.</p>
-            
-            <div class="tip">
-                <strong>Tip:</strong> The best way to learn HTML is by practicing and building your own web pages.
+    subgraph "Planner Agent"
+        Analysis[Intent Analysis]
+        APIMatching[API Capability Matching]
+        SequencePlanning[Execution Sequence Planning]
+        ParameterExtraction[Parameter Extraction]
+    end
+    
+    subgraph "Executor Agent"
+        APICallHandler[API Call Handler]
+        ResponseProcessor[Response Processor]
+        ErrorHandler[Error Handler]
+    end
+    
+    subgraph "Generator Agent"
+        NLGEngine[Natural Language Generator]
+        UISelector[UI Component Selector]
+    end
+    
+    UserQuery --> Analysis
+    APISpecs --> APIMatching
+    Context --> Analysis
+    
+    Analysis --> APIMatching
+    APIMatching --> SequencePlanning
+    Analysis --> ParameterExtraction
+    
+    SequencePlanning --> APICallHandler
+    ParameterExtraction --> APICallHandler
+    
+    APICallHandler --> ResponseProcessor
+    ResponseProcessor --> ErrorHandler
+    
+    ResponseProcessor --> NLGEngine
+    ResponseProcessor --> UISelector
+    
+    NLGEngine --> Response([User Response])
+    UISelector --> Interface([User Interface])
+
+    classDef inputs fill:#e3f2fd,stroke:#333,stroke-width:1px
+    classDef planner fill:#f9d5e5,stroke:#333,stroke-width:1px
+    classDef executor fill:#fff9c4,stroke:#333,stroke-width:1px
+    classDef generator fill:#c8e6c9,stroke:#333,stroke-width:1px
+    classDef outputs fill:#ffcc80,stroke:#333,stroke-width:2px
+    
+    class UserQuery,APISpecs,Context inputs
+    class Analysis,APIMatching,SequencePlanning,ParameterExtraction planner
+    class APICallHandler,ResponseProcessor,ErrorHandler executor
+    class NLGEngine,UISelector generator
+    class Response,Interface outputs
+                </pre>
             </div>
-        </div>
-        
-        <div class="section">
-            <h2>HTML Basics</h2>
-            
-            <h3>HTML Document Structure</h3>
-            <p>Every HTML document follows a basic structure:</p>
-            
-            <div class="code-block">
-&lt;!DOCTYPE html&gt;<br>
-&lt;html lang="en"&gt;<br>
-&lt;head&gt;<br>
-    &lt;meta charset="UTF-8"&gt;<br>
-    &lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;<br>
-    &lt;title&gt;Page Title&lt;/title&gt;<br>
-&lt;/head&gt;<br>
-&lt;body&gt;<br>
-    &lt;!-- Content goes here --&gt;<br>
-    &lt;h1&gt;Hello World!&lt;/h1&gt;<br>
-    &lt;p&gt;This is a paragraph.&lt;/p&gt;<br>
-&lt;/body&gt;<br>
-&lt;/html&gt;
+        </section>
+
+        <section class="mb-12 grid md:grid-cols-2 gap-8">
+            <div class="bg-white p-6 rounded-lg shadow-lg">
+                <h3 class="text-2xl font-bold mb-4 text-indigo-700">Planner Agent Output</h3>
+                <pre class="bg-gray-100 p-4 rounded text-sm overflow-auto">
+{
+  "user_intent": "find_products_by_price",
+  "execution_plan": {
+    "api_calls": [
+      {
+        "endpoint": "/products/search",
+        "method": "GET",
+        "parameters": {
+          "price_max": 50,
+          "in_stock": true,
+          "sort": "price_asc"
+        },
+        "depends_on": null,
+        "expected_response": "product_array"
+      },
+      {
+        "endpoint": "/recommendations",
+        "method": "GET",
+        "parameters": {
+          "product_ids": "$.api_call_0.response.products[*].id"
+        },
+        "depends_on": "api_call_0",
+        "expected_response": "recommendation_array"
+      }
+    ],
+    "fallbacks": [
+      {
+        "if_failed": "api_call_1",
+        "then_use": "/products/similar",
+        "parameters": {
+          "category": "$.api_call_0.response.products[0].category"
+        }
+      }
+    ],
+    "success_criteria": {
+      "condition": "$.api_call_0.response.products.length > 0",
+      "error_message": "No products found in your price range"
+    }
+  }
+}
+                </pre>
             </div>
             
-            <h3>HTML Elements</h3>
-            <p>HTML elements are represented by tags. Tags contain content and other tags.</p>
-            
-            <table>
-                <tr>
-                    <th>Element</th>
-                    <th>Description</th>
-                </tr>
-                <tr>
-                    <td>&lt;h1&gt; to &lt;h6&gt;</td>
-                    <td>Heading elements (h1 is the largest, h6 is the smallest)</td>
-                </tr>
-                <tr>
-                    <td>&lt;p&gt;</td>
-                    <td>Paragraph element</td>
-                </tr>
-                <tr>
-                    <td>&lt;a&gt;</td>
-                    <td>Anchor element (for links)</td>
-                </tr>
-                <tr>
-                    <td>&lt;img&gt;</td>
-                    <td>Image element</td>
-                </tr>
-                <tr>
-                    <td>&lt;div&gt;</td>
-                    <td>Division element (container for other elements)</td>
-                </tr>
-                <tr>
-                    <td>&lt;span&gt;</td>
-                    <td>Inline container for text</td>
-                </tr>
-                <tr>
-                    <td>&lt;ul&gt;, &lt;ol&gt;, &lt;li&gt;</td>
-                    <td>List elements (unordered list, ordered list, list item)</td>
-                </tr>
-            </table>
-        </div>
-        
-        <div class="section">
-            <h2>HTML Examples</h2>
-            
-            <h3>Example 1: Basic Text Formatting</h3>
-            <div class="example-container">
-                <div class="example-preview">
-                    <h1 style="color: #3498db;">Main Heading</h1>
-                    <h2>Subheading</h2>
-                    <p>This is a paragraph with <strong>bold text</strong> and <em>italic text</em>.</p>
-                    <p>Another paragraph with <a href="#" style="color: #3498db; text-decoration: none;">a link</a>.</p>
-                </div>
-                <div class="example-code">
-&lt;h1&gt;Main Heading&lt;/h1&gt;<br>
-&lt;h2&gt;Subheading&lt;/h2&gt;<br>
-&lt;p&gt;This is a paragraph with &lt;strong&gt;bold text&lt;/strong&gt; and &lt;em&gt;italic text&lt;/em&gt;.&lt;/p&gt;<br>
-&lt;p&gt;Another paragraph with &lt;a href="#"&gt;a link&lt;/a&gt;.&lt;/p&gt;
-                </div>
-            </div>
-            
-            <h3>Example 2: Lists</h3>
-            <div class="example-container">
-                <div class="example-preview">
-                    <h3>Unordered List</h3>
-                    <ul>
-                        <li>Item 1</li>
-                        <li>Item 2</li>
-                        <li>Item 3</li>
+            <div class="bg-white p-6 rounded-lg shadow-lg">
+                <h3 class="text-2xl font-bold mb-4 text-indigo-700">How It Works</h3>
+                <ol class="list-decimal pl-5 space-y-2">
+                    <li><strong>Upload API Specifications</strong> - Import your Swagger or Postman API documentation.</li>
+                    <li><strong>Define User Needs</strong> - The system analyzes common user questions and tasks.</li>
+                    <li><strong>Automatic Processing</strong> - When a user asks a question, the Planner Agent determines which APIs to call.</li>
+                    <li><strong>API Execution</strong> - The Executor Agent makes the necessary API calls in sequence.</li>
+                    <li><strong>Smart Response</strong> - The Generator Agent creates natural language responses and UI components.</li>
+                </ol>
+                <div class="mt-6 p-4 bg-indigo-50 rounded-lg border border-indigo-100">
+                    <h4 class="font-bold text-indigo-700">Benefits</h4>
+                    <ul class="list-disc pl-5 mt-2 space-y-1">
+                        <li>No manual coding for each API endpoint</li>
+                        <li>Natural language interface for users</li>
+                        <li>Automatic optimization of API call sequences</li>
+                        <li>Context-aware conversations</li>
+                        <li>Adaptive UI components based on data type</li>
                     </ul>
-                    
-                    <h3>Ordered List</h3>
-                    <ol>
-                        <li>First item</li>
-                        <li>Second item</li>
-                        <li>Third item</li>
-                    </ol>
-                </div>
-                <div class="example-code">
-&lt;h3&gt;Unordered List&lt;/h3&gt;<br>
-&lt;ul&gt;<br>
-    &lt;li&gt;Item 1&lt;/li&gt;<br>
-    &lt;li&gt;Item 2&lt;/li&gt;<br>
-    &lt;li&gt;Item 3&lt;/li&gt;<br>
-&lt;/ul&gt;<br>
-<br>
-&lt;h3&gt;Ordered List&lt;/h3&gt;<br>
-&lt;ol&gt;<br>
-    &lt;li&gt;First item&lt;/li&gt;<br>
-    &lt;li&gt;Second item&lt;/li&gt;<br>
-    &lt;li&gt;Third item&lt;/li&gt;<br>
-&lt;/ol&gt;
                 </div>
             </div>
-            
-            <h3>Example 3: Images and Links</h3>
-            <div class="example-container">
-                <div class="example-preview">
-                    <h3>Image Example</h3>
-                    <img src="https://via.placeholder.com/300x150" alt="Placeholder Image" style="max-width: 100%; height: auto;">
-                    
-                    <h3>Link Example</h3>
-                    <p>Visit <a href="https://www.example.com" target="_blank" style="color: #3498db; text-decoration: none;">Example.com</a></p>
-                </div>
-                <div class="example-code">
-&lt;h3&gt;Image Example&lt;/h3&gt;<br>
-&lt;img src="https://via.placeholder.com/300x150" alt="Placeholder Image"&gt;<br>
-<br>
-&lt;h3&gt;Link Example&lt;/h3&gt;<br>
-&lt;p&gt;Visit &lt;a href="https://www.example.com" target="_blank"&gt;Example.com&lt;/a&gt;&lt;/p&gt;
-                </div>
-            </div>
-            
-            <h3>Example 4: Table</h3>
-            <div class="example-container">
-                <div class="example-preview">
-                    <table style="width:100%; border-collapse: collapse;">
-                        <tr style="background-color: #3498db; color: white;">
-                            <th style="padding: 8px; text-align: left; border: 1px solid #ddd;">Name</th>
-                            <th style="padding: 8px; text-align: left; border: 1px solid #ddd;">Age</th>
-                            <th style="padding: 8px; text-align: left; border: 1px solid #ddd;">Country</th>
-                        </tr>
-                        <tr>
-                            <td style="padding: 8px; text-align: left; border: 1px solid #ddd;">John Doe</td>
-                            <td style="padding: 8px; text-align: left; border: 1px solid #ddd;">28</td>
-                            <td style="padding: 8px; text-align: left; border: 1px solid #ddd;">USA</td>
-                        </tr>
-                        <tr style="background-color: #f2f2f2;">
-                            <td style="padding: 8px; text-align: left; border: 1px solid #ddd;">Jane Smith</td>
-                            <td style="padding: 8px; text-align: left; border: 1px solid #ddd;">32</td>
-                            <td style="padding: 8px; text-align: left; border: 1px solid #ddd;">Canada</td>
-                        </tr>
-                    </table>
-                </div>
-                <div class="example-code">
-&lt;table&gt;<br>
-    &lt;tr&gt;<br>
-        &lt;th&gt;Name&lt;/th&gt;<br>
-        &lt;th&gt;Age&lt;/th&gt;<br>
-        &lt;th&gt;Country&lt;/th&gt;<br>
-    &lt;/tr&gt;<br>
-    &lt;tr&gt;<br>
-        &lt;td&gt;John Doe&lt;/td&gt;<br>
-        &lt;td&gt;28&lt;/td&gt;<br>
-        &lt;td&gt;USA&lt;/td&gt;<br>
-    &lt;/tr&gt;<br>
-    &lt;tr&gt;<br>
-        &lt;td&gt;Jane Smith&lt;/td&gt;<br>
-        &lt;td&gt;32&lt;/td&gt;<br>
-        &lt;td&gt;Canada&lt;/td&gt;<br>
-    &lt;/tr&gt;<br>
-&lt;/table&gt;
-                </div>
-            </div>
-        </div>
-        
-        <div class="section">
-            <h2>HTML Forms</h2>
-            <p>Forms are used to collect user input. Here's a simple contact form example:</p>
-            
-            <div class="example-container">
-                <div class="example-preview">
-                    <form style="max-width: 400px; margin: 0 auto;">
-                        <div style="margin-bottom: 15px;">
-                            <label for="name" style="display: block; margin-bottom: 5px;">Name:</label>
-                            <input type="text" id="name" name="name" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
-                        </div>
-                        <div style="margin-bottom: 15px;">
-                            <label for="email" style="display: block; margin-bottom: 5px;">Email:</label>
-                            <input type="email" id="email" name="email" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
-                        </div>
-                        <div style="margin-bottom: 15px;">
-                            <label for="message" style="display: block; margin-bottom: 5px;">Message:</label>
-                            <textarea id="message" name="message" rows="4" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;"></textarea>
-                        </div>
-                        <button type="submit" style="background-color: #3498db; color: white; border: none; padding: 10px 15px; border-radius: 4px; cursor: pointer;">Submit</button>
-                    </form>
-                </div>
-                <div class="example-code">
-&lt;form&gt;<br>
-    &lt;div&gt;<br>
-        &lt;label for="name"&gt;Name:&lt;/label&gt;<br>
-        &lt;input type="text" id="name" name="name"&gt;<br>
-    &lt;/div&gt;<br>
-    &lt;div&gt;<br>
-        &lt;label for="email"&gt;Email:&lt;/label&gt;<br>
-        &lt;input type="email" id="email" name="email"&gt;<br>
-    &lt;/div&gt;<br>
-    &lt;div&gt;<br>
-        &lt;label for="message"&gt;Message:&lt;/label&gt;<br>
-        &lt;textarea id="message" name="message" rows="4"&gt;&lt;/textarea&gt;<br>
-    &lt;/div&gt;<br>
-    &lt;button type="submit"&gt;Submit&lt;/button&gt;<br>
-&lt;/form&gt;
-                </div>
-            </div>
-            
-            <div class="warning">
-                <strong>Important:</strong> Always validate user input both on the client side (with HTML5 validation attributes) and on the server side.
-            </div>
-        </div>
-        
-        <div class="section">
-            <h2>Resources for Learning HTML</h2>
-            <ul>
-                <li>MDN Web Docs: <a href="https://developer.mozilla.org/en-US/docs/Web/HTML" style="color: #3498db; text-decoration: none;">https://developer.mozilla.org/en-US/docs/Web/HTML</a></li>
-                <li>W3Schools HTML Tutorial: <a href="https://www.w3schools.com/html/" style="color: #3498db; text-decoration: none;">https://www.w3schools.com/html/</a></li>
-                <li>freeCodeCamp HTML Course: <a href="https://www.freecodecamp.org/learn/responsive-web-design/" style="color: #3498db; text-decoration: none;">https://www.freecodecamp.org/learn/responsive-web-design/</a></li>
-            </ul>
-        </div>
-    </div>
-    
-    <footer>
-        <div class="container">
-            <p>&copy; 2025 Learn HTML - A Beginner's Guide. All rights reserved.</p>
+        </section>
+    </main>
+
+    <footer class="bg-gray-800 text-white py-6">
+        <div class="container mx-auto px-4 text-center">
+            <p>LangRev - Automated API Integration System</p>
+            <p class="text-gray-400 text-sm mt-2">© 2025 LangRev</p>
         </div>
     </footer>
+
+    <script>
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: 'default',
+            securityLevel: 'loose',
+            flowchart: {
+                useMaxWidth: false,
+                htmlLabels: true
+            }
+        });
+    </script>
 </body>
 </html>
