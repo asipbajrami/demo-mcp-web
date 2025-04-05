@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LangRev - Real-World Use Case</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mermaid/9.4.3/mermaid.min.js"></script>
+    <style>
+        .mermaid {
+            max-width: 100%;
+            margin: 0 auto;
+        }
+        .gradient-bg {
+            background: linear-gradient(135deg, #6366F1 0%, #A855F7 100%);
+        }
+        .component-card {
+            border-left: 4px solid #6366F1;
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <header class="gradient-bg text-white py-8">
+        <div class="container mx-auto px-4">
+            <h1 class="text-4xl font-bold mb-2">LangRev Real-World Use Case</h1>
+            <p class="text-xl">Step-by-Step Flow of an E-commerce Product Search</p>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-4 py-8">
+        <section class="mb-12">
+            <h2 class="text-3xl font-bold mb-6 text-center">E-commerce Product Search Flow</h2>
+            <div class="bg-white p-6 rounded-lg shadow-lg">
+                <pre class="mermaid">
+sequenceDiagram
+    participant User
+    participant QueryProcessor
+    participant IntentClassifier
+    participant EntityExtractor
+    participant Resolver as Intent & Entity Resolver
+    participant Matcher as API Capability Matcher
+    participant DependencyResolver
+    participant SequenceOptimizer
+    participant ParameterMapper
+    participant PlanAssembler
+    participant ExecutionPlan
+
+    Note over User: Query: "Find me red Nike running shoes under $100 with free shipping"
+    
+    User->>QueryProcessor: "Find me red Nike running shoes under $100 with free shipping"
+    
+    QueryProcessor->>IntentClassifier: Normalized Query
+    QueryProcessor->>EntityExtractor: Normalized Query
+    
+    Note over IntentClassifier: Analyzes query intent
+    IntentClassifier-->>Resolver: Intent: product_search (confidence: 0.98)
+    
+    Note over EntityExtractor: Extracts entities from query
+    EntityExtractor-->>Resolver: Entities: {<br>  product_type: "shoes",<br>  sub_type: "running",<br>  brand: "Nike",<br>  color: "red",<br>  price_max: 100,<br>  features: ["free shipping"]<br>}
+    
+    Resolver->>Matcher: Intent + Entities
+    
+    Note over Matcher: Searches API registry for relevant APIs
+    Matcher-->>DependencyResolver: Candidate APIs:<br>1. /products/search<br>2. /products/filter<br>3. /shipping/options<br>4. /brand/products
+    
+    Note over DependencyResolver: Determines API dependencies
+    DependencyResolver-->>SequenceOptimizer: Dependency Graph
+    
+    Note over SequenceOptimizer: Optimizes API call sequence
+    SequenceOptimizer-->>ParameterMapper: Optimized Sequence:<br>1. /products/search<br>2. /shipping/options
+    
+    Note over ParameterMapper: Maps entities to API parameters
+    ParameterMapper-->>PlanAssembler: Parameter Mappings
+    
+    Note over PlanAssembler: Assembles final execution plan
+    PlanAssembler-->>ExecutionPlan: Structured Execution Plan
+    
+    Note over ExecutionPlan: Final Output to Executor Agent
+                </pre>
+            </div>
+        </section>
+
+        <section class="mb-12">
+            <h2 class="text-3xl font-bold mb-6">Detailed Flow Explanation</h2>
+            
+            <div class="grid md:grid-cols-2 gap-6 mb-10">
+                <div class="bg-white p-5 rounded-lg shadow component-card">
+                    <h4 class="font-bold text-lg mb-2">1. User Query Processing</h4>
+                    <p class="text-gray-700">The user asks a natural language question:</p>
+                    <div class="bg-gray-100 p-3 rounded mt-2 text-gray-700 font-mono text-sm">
+                        "Find me red Nike running shoes under $100 with free shipping"
+                    </div>
+                    <p class="mt-3 text-gray-600">
+                        The Query Processor normalizes this text by removing unnecessary words, correcting spelling, and preparing it for analysis.
+                    </p>
+                </div>
+                
+                <div class="bg-white p-5 rounded-lg shadow component-card">
+                    <h4 class="font-bold text-lg mb-2">2. Intent Classification</h4>
+                    <p class="text-gray-700">The system identifies what the user is trying to do:</p>
+                    <div class="bg-gray-100 p-3 rounded mt-2 text-gray-700 font-mono text-sm">
+                        Intent: product_search<br>
+                        Confidence: 0.98
+                    </div>
+                    <p class="mt-3 text-gray-600">
+                        This is clearly a product search intent (as opposed to order tracking, customer service, etc.) with high confidence.
+                    </p>
+                </div>
+                
+                <div class="bg-white p-5 rounded-lg shadow component-card">
+                    <h4 class="font-bold text-lg mb-2">3. Entity Extraction</h4>
+                    <p class="text-gray-700">The system identifies specific data points from the query:</p>
+                    <div class="bg-gray-100 p-3 rounded mt-2 text-gray-700 font-mono text-sm">
+                        {<br>
+                        &nbsp;&nbsp;product_type: "shoes",<br>
+                        &nbsp;&nbsp;sub_type: "running",<br>
+                        &nbsp;&nbsp;brand: "Nike",<br>
+                        &nbsp;&nbsp;color: "red",<br>
+                        &nbsp;&nbsp;price_max: 100,<br>
+                        &nbsp;&nbsp;features: ["free shipping"]<br>
+                        }
+                    </div>
+                </div>
+                
+                <div class="bg-white p-5 rounded-lg shadow component-card">
+                    <h4 class="font-bold text-lg mb-2">4. API Capability Matching</h4>
+                    <p class="text-gray-700">Based on intent and entities, the system identifies relevant APIs:</p>
+                    <div class="bg-gray-100 p-3 rounded mt-2 text-gray-700 font-mono text-sm">
+                        1. /products/search<br>
+                        &nbsp;&nbsp;- General product search API<br>
+                        &nbsp;&nbsp;- Supports filtering by multiple attributes<br><br>
+                        
+                        2. /products/filter<br>
+                        &nbsp;&nbsp;- Specialized filtering API<br>
+                        &nbsp;&nbsp;- More advanced filtering options<br><br>
+                        
+                        3. /shipping/options<br>
+                        &nbsp;&nbsp;- Provides shipping information<br>
+                        &nbsp;&nbsp;- Can filter for free shipping<br><br>
+                        
+                        4. /brand/products<br>
+                        &nbsp;&nbsp;- Brand-specific product search<br>
+                        &nbsp;&nbsp;- Specialized for Nike products
+                    </div>
+                </div>
+                
+                <div class="bg-white p-5 rounded-lg shadow component-card">
+                    <h4 class="font-bold text-lg mb-2">5. Dependency Resolution & Optimization</h4>
+                    <p class="text-gray-700">The system determines dependencies and the optimal order for API calls:</p>
+                    <div class="bg-gray-100 p-3 rounded mt-2 text-gray-700 font-mono text-sm">
+                        Optimized sequence:<br>
+                        1. /products/search<br>
+                        &nbsp;&nbsp;- Primary search to find products<br>
+                        &nbsp;&nbsp;- Apply most filters here<br><br>
+                        
+                        2. /shipping/options<br>
+                        &nbsp;&nbsp;- Secondary call to verify free shipping<br>
+                        &nbsp;&nbsp;- Depends on product_ids from first call
+                    </div>
+                    <p class="mt-3 text-gray-600">
+                        The optimizer concludes that using /products/search with brand and category filters is more efficient than calling /brand/products separately.
+                    </p>
+                </div>
+                
+                <div class="bg-white p-5 rounded-lg shadow component-card">
+                    <h4 class="font-bold text-lg mb-2">6. Parameter Mapping & Plan Assembly</h4>
+                    <p class="text-gray-700">Entities are mapped to API parameters and the final plan is assembled:</p>
+                    <div class="bg-gray-100 p-3 rounded mt-2 text-gray-700 font-mono text-sm">
+                        {<br>
+                        &nbsp;&nbsp;"api_calls": [<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;{<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"endpoint": "/products/search",<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"method": "GET",<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"parameters": {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"category": "shoes",<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"subcategory": "running",<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"brand": "Nike",<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"color": "red",<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"price_max": 100<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;},<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;{<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"endpoint": "/shipping/options",<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"method": "GET",<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"parameters": {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"product_ids": "$.api_call_0.response.products[*].id",<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"filter": "free_only"<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;},<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"depends_on": "api_call_0"<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                        &nbsp;&nbsp;],<br>
+                        &nbsp;&nbsp;"fallbacks": [...],<br>
+                        &nbsp;&nbsp;"success_criteria": {<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;"condition": "$.api_call_1.response.products.length > 0"<br>
+                        &nbsp;&nbsp;}<br>
+                        }
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="mb-12 bg-white p-6 rounded-lg shadow-lg">
+            <h2 class="text-3xl font-bold mb-6">What Happens Next?</h2>
+            
+            <div class="grid md:grid-cols-2 gap-8">
+                <div>
+                    <h3 class="text-xl font-bold mb-4 text-indigo-700">Executor Agent's Role</h3>
+                    <p class="mb-4">After the Planner Agent creates the execution plan, the Executor Agent takes over:</p>
+                    <ol class="list-decimal ml-5 space-y-2">
+                        <li>Makes the first API call to <code>/products/search</code> with all the product filters</li>
+                        <li>Receives product results that match the basic criteria</li>
+                        <li>Extracts product IDs from the results</li>
+                        <li>Makes the second API call to <code>/shipping/options</code> with those product IDs</li>
+                        <li>Filters the results to only show products with free shipping</li>
+                        <li>Combines and structures the data from both API calls</li>
+                    </ol>
+                </div>
+                
+                <div>
+                    <h3 class="text-xl font-bold mb-4 text-indigo-700">Generator Agent's Role</h3>
+                    <p class="mb-4">Finally, the Generator Agent creates the response for the user:</p>
+                    <ol class="list-decimal ml-5 space-y-2">
+                        <li>Processes the structured data from the Executor Agent</li>
+                        <li>Creates a natural language summary of the results</li>
+                        <li>Formats product information in an easy-to-read format</li>
+                        <li>Highlights key features like free shipping</li>
+                        <li>Selects appropriate UI components (product grid, filters, etc.)</li>
+                        <li>Returns the complete response to the user</li>
+                    </ol>
+                </div>
+            </div>
+            
+            <div class="mt-8 p-4 bg-indigo-50 rounded-lg">
+                <h3 class="font-bold text-lg mb-2 text-indigo-700">Example User Response</h3>
+                <p class="italic">
+                    "I found 6 pairs of red Nike running shoes under $100 with free shipping. The Nike Revolution 6 is the most popular at $65, with free 2-day shipping. Would you like to see all the options or refine your search further?"
+                </p>
+            </div>
+        </section>
+    </main>
+
+    <footer class="bg-gray-800 text-white py-6">
+        <div class="container mx-auto px-4 text-center">
+            <p>LangRev - Automated API Integration System</p>
+            <p class="text-gray-400 text-sm mt-2">© 2025 LangRev</p>
+        </div>
+    </footer>
+
+    <script>
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: 'default',
+            securityLevel: 'loose',
+            flowchart: {
+                useMaxWidth: false,
+                htmlLabels: true
+            }
+        });
+    </script>
+</body>
+</html>
