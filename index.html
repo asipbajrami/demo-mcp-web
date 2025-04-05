@@ -53,6 +53,42 @@
             margin-bottom: 15px;
             color: #444;
         }
+        .langgraph-node {
+            fill: #34a853;
+            stroke: #0d652d;
+            stroke-width: 2;
+        }
+        .langgraph-node-input {
+            fill: #fbbc05;
+            stroke: #b26e00;
+            stroke-width: 2;
+        }
+        .langgraph-node-output {
+            fill: #ea4335;
+            stroke: #a52714;
+            stroke-width: 2;
+        }
+        .langgraph-arrow {
+            stroke: #666;
+            stroke-width: 2;
+            fill: none;
+        }
+        .langgraph-arrowhead {
+            fill: #666;
+        }
+        .langgraph-text {
+            font-family: Arial, sans-serif;
+            font-size: 14px;
+            fill: white;
+            text-anchor: middle;
+            dominant-baseline: middle;
+        }
+        .langgraph-label {
+            font-family: Arial, sans-serif;
+            font-size: 12px;
+            fill: #444;
+            text-anchor: middle;
+        }
     </style>
 </head>
 <body>
@@ -112,12 +148,74 @@
             </svg>
         </div>
         
+        <div class="diagram-container">
+            <h3 class="diagram-heading">LangGraph Flow Diagram</h3>
+            <svg width="700" height="400" viewBox="0 0 700 400">
+                <!-- Define arrow marker -->
+                <defs>
+                    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+                        <polygon points="0 0, 10 3.5, 0 7" class="langgraph-arrowhead"/>
+                    </marker>
+                </defs>
+                
+                <!-- Input node -->
+                <rect x="50" y="150" width="120" height="60" rx="10" class="langgraph-node-input" />
+                <text x="110" y="180" class="langgraph-text">User Input</text>
+                
+                <!-- Processing nodes -->
+                <rect x="290" y="50" width="120" height="60" rx="10" class="langgraph-node" />
+                <text x="350" y="80" class="langgraph-text">Input Parsing</text>
+                
+                <rect x="290" y="150" width="120" height="60" rx="10" class="langgraph-node" />
+                <text x="350" y="180" class="langgraph-text">Context Retrieval</text>
+                
+                <rect x="290" y="250" width="120" height="60" rx="10" class="langgraph-node" />
+                <text x="350" y="280" class="langgraph-text">LLM Processing</text>
+                
+                <rect x="290" y="350" width="120" height="60" rx="10" class="langgraph-node" />
+                <text x="350" y="380" class="langgraph-text">Tool Execution</text>
+                
+                <!-- Output node -->
+                <rect x="530" y="150" width="120" height="60" rx="10" class="langgraph-node-output" />
+                <text x="590" y="180" class="langgraph-text">Response</text>
+                
+                <!-- Connecting arrows -->
+                <path d="M170 180 C230 180, 230 80, 290 80" class="langgraph-arrow" marker-end="url(#arrowhead)" />
+                <text x="230" y="110" class="langgraph-label">Parse request</text>
+                
+                <path d="M170 180 C230 180, 260 180, 290 180" class="langgraph-arrow" marker-end="url(#arrowhead)" />
+                <text x="230" y="160" class="langgraph-label">Get context</text>
+                
+                <path d="M170 180 C230 180, 230 280, 290 280" class="langgraph-arrow" marker-end="url(#arrowhead)" />
+                <text x="230" y="250" class="langgraph-label">Generate</text>
+                
+                <path d="M170 180 C220 180, 220 380, 290 380" class="langgraph-arrow" marker-end="url(#arrowhead)" />
+                <text x="230" y="350" class="langgraph-label">Use tools</text>
+                
+                <!-- Node interconnections -->
+                <path d="M410 80 C450 80, 470 150, 530 180" class="langgraph-arrow" marker-end="url(#arrowhead)" />
+                <path d="M410 180 C450 180, 490 180, 530 180" class="langgraph-arrow" marker-end="url(#arrowhead)" />
+                <path d="M410 280 C450 280, 470 210, 530 180" class="langgraph-arrow" marker-end="url(#arrowhead)" />
+                <path d="M410 380 C460 380, 480 210, 530 180" class="langgraph-arrow" marker-end="url(#arrowhead)" />
+                
+                <!-- Feedback loops -->
+                <path d="M350 310 C350 330, 350 330, 350 350" class="langgraph-arrow" marker-end="url(#arrowhead)" />
+                <path d="M350 210 C350 230, 350 230, 350 250" class="langgraph-arrow" marker-end="url(#arrowhead)" />
+                <path d="M350 110 C350 130, 350 130, 350 150" class="langgraph-arrow" marker-end="url(#arrowhead)" />
+                
+                <!-- Conditional branch -->
+                <path d="M360 310 C430 310, 430 230, 360 230" class="langgraph-arrow" marker-end="url(#arrowhead)" />
+                <text x="430" y="270" class="langgraph-label">Refinement</text>
+            </svg>
+        </div>
+        
         <h2>Features</h2>
         <ul>
             <li>Simple, responsive design</li>
             <li>Clean HTML structure</li>
             <li>Basic CSS styling</li>
             <li>Project structure diagram</li>
+            <li>LangGraph flow visualization</li>
         </ul>
     </div>
     
