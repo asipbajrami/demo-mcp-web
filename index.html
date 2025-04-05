@@ -3,197 +3,416 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sistemi i Integruar Mjedisor - AKM</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <title>LangRev - Planner Agent Architecture</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mermaid/9.4.3/mermaid.min.js"></script>
     <style>
-        :root {
-            --primary: #1e6f5c;
-            --secondary: #29bb89;
-            --accent: #e6dd3b;
-            --dark: #212121;
-            --light: #f8f9fa;
-            --white: #ffffff;
-        }
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body {
-            font-family: 'Segoe UI', sans-serif;
-            line-height: 1.6;
-            color: #333;
-            background-color: var(--light);
-        }
-        .container {
-            width: 90%;
-            max-width: 1200px;
+        .mermaid {
+            max-width: 100%;
             margin: 0 auto;
-            padding: 0 20px;
         }
-        header {
-            background: linear-gradient(to right, var(--primary), var(--secondary));
-            color: var(--white);
-            padding: 2rem 0;
+        .gradient-bg {
+            background: linear-gradient(135deg, #6366F1 0%, #A855F7 100%);
         }
-        nav {
-            background-color: var(--dark);
-            color: var(--white);
-            padding: 1rem 0;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
-        .nav-container {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .logo {
-            font-size: 1.5rem;
-            font-weight: bold;
-            color: var(--white);
-            text-decoration: none;
-        }
-        .nav-menu {
-            display: flex;
-            list-style: none;
-        }
-        .nav-item { margin-left: 1.5rem; }
-        .nav-link {
-            color: var(--white);
-            text-decoration: none;
-        }
-        .section {
-            padding: 3rem 0;
-        }
-        .section-title {
-            text-align: center;
-            margin-bottom: 2rem;
-            color: var(--primary);
-        }
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-        }
-        .card {
-            background-color: var(--white);
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-            padding: 1.5rem;
-        }
-        .btn {
-            display: inline-block;
-            background-color: var(--primary);
-            color: var(--white);
-            padding: 0.8rem 1.5rem;
-            border-radius: 5px;
-            text-decoration: none;
-            margin-top: 1rem;
-        }
-        footer {
-            background-color: var(--dark);
-            color: var(--white);
-            padding: 2rem 0;
-            text-align: center;
-            margin-top: 2rem;
-        }
-        @media (max-width: 768px) {
-            .nav-menu { display: none; }
-            .grid { grid-template-columns: 1fr; }
+        .component-card {
+            border-left: 4px solid #6366F1;
         }
     </style>
 </head>
-<body>
-    <header>
-        <div class="container">
-            <h1>Sistemi i Integruar Mjedisor</h1>
-            <p>Përmirësimi i Sistemit të Integruar Mjedisor për Agjencinë Kombëtare të Mjedisit</p>
+<body class="bg-gray-50">
+    <header class="gradient-bg text-white py-8">
+        <div class="container mx-auto px-4">
+            <h1 class="text-4xl font-bold mb-2">LangRev Planner Agent</h1>
+            <p class="text-xl">Detailed Architecture & Component Breakdown</p>
         </div>
     </header>
+
+    <main class="container mx-auto px-4 py-8">
+        <section class="mb-12">
+            <h2 class="text-3xl font-bold mb-6 text-center">Planner Agent Architecture</h2>
+            <div class="bg-white p-6 rounded-lg shadow-lg">
+                <pre class="mermaid">
+flowchart TD
+    subgraph "Planner Agent Architecture"
+        subgraph "Input Processing"
+            UserQuery([User Query])
+            QueryContext([Context History])
+            APIRegistry[(API Registry)]
+            
+            UserQuery --> QueryPreprocessor[Query Preprocessor]
+            QueryContext --> QueryPreprocessor
+            
+            QueryPreprocessor --> IntentClassifier[Intent Classifier]
+            QueryPreprocessor --> EntityExtractor[Entity Extractor]
+            
+            IntentClassifier --> IntentEntity[Intent & Entity Resolution]
+            EntityExtractor --> IntentEntity
+        end
+        
+        subgraph "API Matching"
+            IntentEntity --> CapabilityMatcher[API Capability Matcher]
+            APIRegistry --> CapabilityMatcher
+            CapabilityMatcher --> CandidateAPIs[Candidate API Set]
+        end
+        
+        subgraph "Plan Generation"
+            CandidateAPIs --> DependencyResolver[Dependency Resolver]
+            DependencyResolver --> SequenceOptimizer[Sequence Optimizer]
+            SequenceOptimizer --> ParameterMapper[Parameter Mapper]
+            ParameterMapper --> FallbackPlanner[Fallback Planner]
+            FallbackPlanner --> ValidationChecker[Validation Checker]
+            ValidationChecker --> PlanAssembler[Plan Assembler]
+        end
+        
+        PlanAssembler --> ExecutionPlan[Execution Plan]
+    end
     
-    <nav>
-        <div class="container nav-container">
-            <a href="#" class="logo">AKM</a>
-            <ul class="nav-menu">
-                <li class="nav-item"><a href="#about" class="nav-link">Rreth Projektit</a></li>
-                <li class="nav-item"><a href="#modules" class="nav-link">Modulet</a></li>
-                <li class="nav-item"><a href="#timeline" class="nav-link">Afatet</a></li>
-                <li class="nav-item"><a href="https://github.com/asipbajrami/sim-akm-web" class="nav-link">GitHub</a></li>
-            </ul>
-        </div>
-    </nav>
+    classDef input fill:#e3f2fd,stroke:#333,stroke-width:1px
+    classDef processing fill:#f9d5e5,stroke:#333,stroke-width:1px
+    classDef matching fill:#fff9c4,stroke:#333,stroke-width:1px
+    classDef planning fill:#c8e6c9,stroke:#333,stroke-width:1px
+    classDef output fill:#ffcc80,stroke:#333,stroke-width:2px
     
-    <section class="section" id="about">
-        <div class="container">
-            <h2 class="section-title">Rreth Projektit</h2>
-            <p>Sistemi i Integruar Mjedisor (SIM) transformon menaxhimin e lejeve mjedisore, monitorimin, raportimin dhe transparencën në fushën e mjedisit, duke centralizuar të dhënat dhe përmirësuar vendimmarrjen.</p>
-            <div style="text-align: center; margin-top: 1.5rem;">
-                <a href="#modules" class="btn">Shiko Modulet</a>
+    class UserQuery,QueryContext,APIRegistry input
+    class QueryPreprocessor,IntentClassifier,EntityExtractor,IntentEntity processing
+    class CapabilityMatcher,CandidateAPIs matching
+    class DependencyResolver,SequenceOptimizer,ParameterMapper,FallbackPlanner,ValidationChecker,PlanAssembler planning
+    class ExecutionPlan output
+                </pre>
             </div>
-        </div>
-    </section>
-    
-    <section class="section" id="modules" style="background-color: white;">
-        <div class="container">
-            <h2 class="section-title">Modulet Funksionalë</h2>
-            <div class="grid">
-                <div class="card">
-                    <h3>Menaxhimi i Lejeve Mjedisore</h3>
-                    <p>Automatizimi i plotë i procesit të aplikimit, shqyrtimit dhe lëshimit të lejeve mjedisore të tipit A dhe B, si dhe licencat III.2.B.</p>
+        </section>
+
+        <section class="mb-12">
+            <h2 class="text-3xl font-bold mb-6">Component Descriptions</h2>
+            
+            <div class="bg-indigo-50 p-4 mb-8 rounded-lg">
+                <h3 class="text-xl font-bold text-indigo-800 mb-2">1. Input Processing Components</h3>
+                <p class="mb-2 text-gray-700">These components analyze the user's query and extract meaningful information from it.</p>
+            </div>
+            
+            <div class="grid md:grid-cols-2 gap-6 mb-10">
+                <div class="bg-white p-5 rounded-lg shadow component-card">
+                    <h4 class="font-bold text-lg mb-2">Query Preprocessor</h4>
+                    <p class="text-gray-700">Takes the raw user query and performs initial processing tasks such as:</p>
+                    <ul class="list-disc ml-5 mt-2 space-y-1 text-gray-600">
+                        <li>Text normalization (lowercasing, removing extra spaces)</li>
+                        <li>Tokenization (breaking the query into words/phrases)</li>
+                        <li>Language detection for multilingual support</li>
+                        <li>Incorporating conversation context from previous interactions</li>
+                        <li>Expanding abbreviations and handling synonyms</li>
+                    </ul>
                 </div>
                 
-                <div class="card">
-                    <h3>Vetëmonitorimi dhe Raportimi</h3>
-                    <p>Platformë për dorëzimin elektronik të raporteve të vetëmonitorimit, me analiza të gjeneruara automatikisht.</p>
+                <div class="bg-white p-5 rounded-lg shadow component-card">
+                    <h4 class="font-bold text-lg mb-2">Intent Classifier</h4>
+                    <p class="text-gray-700">Determines what the user is trying to accomplish. For example:</p>
+                    <ul class="list-disc ml-5 mt-2 space-y-1 text-gray-600">
+                        <li>Searching for products (search_intent)</li>
+                        <li>Checking order status (order_status_intent)</li>
+                        <li>Comparing items (comparison_intent)</li>
+                        <li>Requesting specific information (info_intent)</li>
+                        <li>Uses semantic understanding of language, not just keywords</li>
+                    </ul>
                 </div>
                 
-                <div class="card">
-                    <h3>Portali Publik</h3>
-                    <p>Ofron qasje publike në informacionin mjedisor, leje, raporte dhe vendime të rëndësishme.</p>
+                <div class="bg-white p-5 rounded-lg shadow component-card">
+                    <h4 class="font-bold text-lg mb-2">Entity Extractor</h4>
+                    <p class="text-gray-700">Identifies specific data points and parameters from the query:</p>
+                    <ul class="list-disc ml-5 mt-2 space-y-1 text-gray-600">
+                        <li>Product attributes (price, color, size)</li>
+                        <li>Time references (dates, durations)</li>
+                        <li>Quantities and numerical values</li>
+                        <li>Named entities (brands, people, locations)</li>
+                        <li>Custom domain-specific entities</li>
+                    </ul>
                 </div>
                 
-                <div class="card">
-                    <h3>Analiza dhe Raportimi</h3>
-                    <p>Mjete për përpunimin dhe analizën e të dhënave mjedisore, dhe gjenerimin e raporteve për vendimmarrje.</p>
+                <div class="bg-white p-5 rounded-lg shadow component-card">
+                    <h4 class="font-bold text-lg mb-2">Intent & Entity Resolution</h4>
+                    <p class="text-gray-700">Combines and reconciles the outputs from intent and entity analysis:</p>
+                    <ul class="list-disc ml-5 mt-2 space-y-1 text-gray-600">
+                        <li>Resolves ambiguities between conflicting entities</li>
+                        <li>Infers missing but implied entities based on intent</li>
+                        <li>Validates that extracted entities make sense for the identified intent</li>
+                        <li>Assigns confidence scores to intent and entity matches</li>
+                        <li>Creates a structured representation of user needs</li>
+                    </ul>
                 </div>
             </div>
-        </div>
-    </section>
-    
-    <section class="section" id="timeline">
-        <div class="container">
-            <h2 class="section-title">Afatet e Implementimit</h2>
-            <div class="grid">
-                <div class="card">
-                    <h3>Faza I: Përgatitore</h3>
-                    <p>Analizimi i kërkesave funksionale dhe bazës ligjore.</p>
-                    <p><strong>Kohëzgjatja:</strong> Muaji 1</p>
+            
+            <div class="bg-yellow-50 p-4 mb-8 rounded-lg">
+                <h3 class="text-xl font-bold text-yellow-800 mb-2">2. API Matching Components</h3>
+                <p class="mb-2 text-gray-700">These components find the most appropriate APIs to fulfill the user's request.</p>
+            </div>
+            
+            <div class="grid md:grid-cols-2 gap-6 mb-10">
+                <div class="bg-white p-5 rounded-lg shadow component-card">
+                    <h4 class="font-bold text-lg mb-2">API Capability Matcher</h4>
+                    <p class="text-gray-700">Maps user intent and entities to available API capabilities:</p>
+                    <ul class="list-disc ml-5 mt-2 space-y-1 text-gray-600">
+                        <li>Builds a semantic understanding of what each API does</li>
+                        <li>Calculates relevance scores between user intent and API functions</li>
+                        <li>Considers parameter compatibility with extracted entities</li>
+                        <li>Evaluates historical performance of APIs for similar queries</li>
+                        <li>Applies domain-specific rules for API selection</li>
+                    </ul>
                 </div>
                 
-                <div class="card">
-                    <h3>Faza II: Përmirësimi i Sistemit</h3>
-                    <p>Implementimi i përmirësimeve sipas kërkesave dhe ndryshimeve ligjore.</p>
-                    <p><strong>Kohëzgjatja:</strong> Muaji 2-8</p>
-                </div>
-                
-                <div class="card">
-                    <h3>Faza III: Testimi dhe Trajnimi</h3>
-                    <p>Verifikimi i funksionaliteteve dhe trajnimi i personelit.</p>
-                    <p><strong>Kohëzgjatja:</strong> Muaji 8</p>
-                </div>
-                
-                <div class="card">
-                    <h3>Faza IV & V: Dorëzimi dhe Mirëmbajtja</h3>
-                    <p>Dorëzimi i sistemit dhe mirëmbajtja 2-vjeçare.</p>
-                    <p><strong>Kohëzgjatja:</strong> Muaji 9-33</p>
+                <div class="bg-white p-5 rounded-lg shadow component-card">
+                    <h4 class="font-bold text-lg mb-2">Candidate API Set</h4>
+                    <p class="text-gray-700">Represents the collection of potentially useful APIs:</p>
+                    <ul class="list-disc ml-5 mt-2 space-y-1 text-gray-600">
+                        <li>Ranked list of API endpoints that could fulfill the request</li>
+                        <li>Metadata about each API's capabilities and requirements</li>
+                        <li>Expected inputs and outputs for each API</li>
+                        <li>Alternative API options for each part of the request</li>
+                        <li>Potential combinations of APIs that might work together</li>
+                    </ul>
                 </div>
             </div>
-        </div>
-    </section>
-    
-    <footer>
-        <div class="container">
-            <p>© 2025 Agjencia Kombëtare e Mjedisit. Të gjitha të drejtat të rezervuara.</p>
-            <p><a href="https://github.com/asipbajrami/demo-mcp-web" style="color: var(--accent);">GitHub Repository</a></p>
+            
+            <div class="bg-green-50 p-4 mb-8 rounded-lg">
+                <h3 class="text-xl font-bold text-green-800 mb-2">3. Plan Generation Components</h3>
+                <p class="mb-2 text-gray-700">These components create a comprehensive and optimized plan for API execution.</p>
+            </div>
+            
+            <div class="grid md:grid-cols-2 gap-6 mb-10">
+                <div class="bg-white p-5 rounded-lg shadow component-card">
+                    <h4 class="font-bold text-lg mb-2">Dependency Resolver</h4>
+                    <p class="text-gray-700">Determines the relationships between different API calls:</p>
+                    <ul class="list-disc ml-5 mt-2 space-y-1 text-gray-600">
+                        <li>Identifies which APIs need outputs from other APIs</li>
+                        <li>Creates a directed graph of data dependencies</li>
+                        <li>Detects and resolves circular dependencies</li>
+                        <li>Determines which API calls can run in parallel</li>
+                        <li>Tags required data transformations between API calls</li>
+                    </ul>
+                </div>
+                
+                <div class="bg-white p-5 rounded-lg shadow component-card">
+                    <h4 class="font-bold text-lg mb-2">Sequence Optimizer</h4>
+                    <p class="text-gray-700">Finds the most efficient execution order:</p>
+                    <ul class="list-disc ml-5 mt-2 space-y-1 text-gray-600">
+                        <li>Minimizes the total number of API calls</li>
+                        <li>Arranges for parallel execution where possible</li>
+                        <li>Prioritizes faster and more reliable APIs</li>
+                        <li>Considers API rate limits and quotas</li>
+                        <li>Optimizes for minimal latency in the overall plan</li>
+                    </ul>
+                </div>
+                
+                <div class="bg-white p-5 rounded-lg shadow component-card">
+                    <h4 class="font-bold text-lg mb-2">Parameter Mapper</h4>
+                    <p class="text-gray-700">Maps available data to API parameters:</p>
+                    <ul class="list-disc ml-5 mt-2 space-y-1 text-gray-600">
+                        <li>Formats entity values to match API parameter requirements</li>
+                        <li>Creates JSONPath/XPath expressions for dependent parameters</li>
+                        <li>Sets default values for optional parameters</li>
+                        <li>Handles type conversions and formatting</li>
+                        <li>Validates parameter values against API constraints</li>
+                    </ul>
+                </div>
+                
+                <div class="bg-white p-5 rounded-lg shadow component-card">
+                    <h4 class="font-bold text-lg mb-2">Fallback Planner</h4>
+                    <p class="text-gray-700">Designs alternative pathways for error cases:</p>
+                    <ul class="list-disc ml-5 mt-2 space-y-1 text-gray-600">
+                        <li>Identifies critical failure points in the plan</li>
+                        <li>Creates alternative API sequences for common errors</li>
+                        <li>Sets up retry strategies with exponential backoff</li>
+                        <li>Provides default responses for failed API calls</li>
+                        <li>Prioritizes graceful degradation of functionality</li>
+                    </ul>
+                </div>
+                
+                <div class="bg-white p-5 rounded-lg shadow component-card">
+                    <h4 class="font-bold text-lg mb-2">Validation Checker</h4>
+                    <p class="text-gray-700">Ensures the plan will likely succeed:</p>
+                    <ul class="list-disc ml-5 mt-2 space-y-1 text-gray-600">
+                        <li>Verifies all required parameters have values</li>
+                        <li>Confirms API dependency chains are valid</li>
+                        <li>Checks for potential security or permission issues</li>
+                        <li>Estimates plan execution time and resource usage</li>
+                        <li>Identifies edge cases that might cause problems</li>
+                    </ul>
+                </div>
+                
+                <div class="bg-white p-5 rounded-lg shadow component-card">
+                    <h4 class="font-bold text-lg mb-2">Plan Assembler</h4>
+                    <p class="text-gray-700">Creates the final structured execution plan:</p>
+                    <ul class="list-disc ml-5 mt-2 space-y-1 text-gray-600">
+                        <li>Formats the plan in the expected JSON structure</li>
+                        <li>Adds metadata and context for debugging</li>
+                        <li>Includes success criteria for evaluation</li>
+                        <li>Organizes all fallback options</li>
+                        <li>Provides explanations for plan decisions</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="bg-orange-50 p-4 mb-8 rounded-lg">
+                <h3 class="text-xl font-bold text-orange-800 mb-2">4. Output Component</h3>
+                <p class="mb-2 text-gray-700">The final product of the Planner Agent process.</p>
+            </div>
+            
+            <div class="bg-white p-5 rounded-lg shadow component-card mb-6">
+                <h4 class="font-bold text-lg mb-2">Execution Plan</h4>
+                <p class="text-gray-700">The comprehensive blueprint for fulfilling the user's request:</p>
+                <ul class="list-disc ml-5 mt-2 space-y-1 text-gray-600">
+                    <li>Complete sequence of API calls with all parameters</li>
+                    <li>Data dependencies between calls</li>
+                    <li>Fallback options for error handling</li>
+                    <li>Success criteria for validating responses</li>
+                    <li>Response processing instructions</li>
+                </ul>
+            </div>
+        </section>
+
+        <section class="mb-12">
+            <h2 class="text-3xl font-bold mb-6">Execution Plan Output Example</h2>
+            <div class="bg-white p-6 rounded-lg shadow-lg">
+                <h3 class="text-xl font-bold mb-4 text-indigo-700">For Query: "Show me affordable laptops with good battery life"</h3>
+                <pre class="bg-gray-100 p-4 rounded text-sm overflow-auto">
+{
+  "user_intent": "product_search",
+  "extracted_entities": {
+    "product_type": "laptops",
+    "attributes": [
+      {"name": "price", "value": "affordable", "normalized_value": "price_range:budget"},
+      {"name": "battery_life", "value": "good", "normalized_value": "min_hours:6"}
+    ]
+  },
+  "execution_plan": {
+    "api_calls": [
+      {
+        "id": "api_call_0",
+        "endpoint": "/products/search",
+        "method": "GET",
+        "parameters": {
+          "category": "electronics",
+          "subcategory": "laptops",
+          "price_min": 0,
+          "price_max": 800,
+          "sort": "popularity_desc",
+          "page": 1,
+          "page_size": 20
+        },
+        "depends_on": null,
+        "expected_response": "product_array"
+      },
+      {
+        "id": "api_call_1",
+        "endpoint": "/products/filters",
+        "method": "GET",
+        "parameters": {
+          "product_ids": "$.api_call_0.response.products[*].id",
+          "filter_type": "battery_life"
+        },
+        "depends_on": "api_call_0",
+        "expected_response": "filter_options"
+      },
+      {
+        "id": "api_call_2",
+        "endpoint": "/products/filter",
+        "method": "POST",
+        "parameters": {
+          "product_ids": "$.api_call_0.response.products[*].id",
+          "filters": {
+            "battery_life_min_hours": 6
+          }
+        },
+        "depends_on": "api_call_0",
+        "expected_response": "filtered_product_array"
+      }
+    ],
+    "fallbacks": [
+      {
+        "if_failed": "api_call_1",
+        "then_use": {
+          "endpoint": "/products/attributes",
+          "method": "GET",
+          "parameters": {
+            "product_ids": "$.api_call_0.response.products[*].id",
+            "attributes": ["battery_life"]
+          }
+        }
+      },
+      {
+        "if_failed": "api_call_2",
+        "then_use": {
+          "static_filter": {
+            "description": "Apply client-side filtering for battery life using product descriptions",
+            "method": "keyword_match",
+            "keywords": ["long battery", "battery life", "all-day battery", "extended battery"]
+          }
+        }
+      }
+    ],
+    "success_criteria": {
+      "primary_condition": "$.api_call_2.response.products.length > 0",
+      "secondary_condition": "$.api_call_0.response.products.length > 0",
+      "error_message": "No laptops found matching your criteria. Would you like to see our most popular laptops instead?"
+    },
+    "response_requirements": {
+      "primary_data": "$.api_call_2.response.products",
+      "fallback_data": "$.api_call_0.response.products",
+      "highlighting": ["battery_life", "price"],
+      "suggested_ui": "product_grid"
+    }
+  }
+}
+                </pre>
+            </div>
+        </section>
+
+        <section class="mb-12 bg-white p-6 rounded-lg shadow-lg">
+            <h2 class="text-3xl font-bold mb-6">Implementation Approaches</h2>
+            
+            <div class="grid md:grid-cols-2 gap-8">
+                <div>
+                    <h3 class="text-xl font-bold mb-4 text-indigo-700">LLM-Centric Approach</h3>
+                    <p class="mb-4">This approach uses a large language model as the primary reasoning engine:</p>
+                    <ul class="list-disc ml-5 space-y-2">
+                        <li><strong>Prompt Engineering</strong> - Carefully designed prompts guide the LLM through each step of the planning process</li>
+                        <li><strong>Few-Shot Learning</strong> - Examples of good plans are included in context to improve output quality</li>
+                        <li><strong>Chain-of-Thought</strong> - The LLM is prompted to explain its reasoning at each step</li>
+                        <li><strong>Output Parsing</strong> - Structured output formats ensure the LLM generates valid JSON plans</li>
+                        <li><strong>Verification Loops</strong> - Additional LLM calls verify and improve the initial plan</li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h3 class="text-xl font-bold mb-4 text-indigo-700">Hybrid Approach</h3>
+                    <p class="mb-4">This approach combines LLMs with traditional algorithms:</p>
+                    <ul class="list-disc ml-5 space-y-2">
+                        <li><strong>Intent Classification</strong> - Fine-tuned language models for domain-specific intent recognition</li>
+                        <li><strong>Entity Extraction</strong> - Named entity recognition systems combined with regex patterns</li>
+                        <li><strong>Graph Algorithms</strong> - For dependency resolution and sequence optimization</li>
+                        <li><strong>Rule-Based Systems</strong> - For validation and constraint checking</li>
+                        <li><strong>Vector Embeddings</strong> - For semantic matching between intents and API capabilities</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="bg-gray-800 text-white py-6">
+        <div class="container mx-auto px-4 text-center">
+            <p>LangRev - Automated API Integration System</p>
+            <p class="text-gray-400 text-sm mt-2">© 2025 LangRev</p>
         </div>
     </footer>
+
+    <script>
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: 'default',
+            securityLevel: 'loose',
+            flowchart: {
+                useMaxWidth: false,
+                htmlLabels: true
+            }
+        });
+    </script>
 </body>
 </html>
