@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>E-Commerce API Architecture</title>
+    <style>
+        :root {
+            --primary-color: #4a6fa5;
+            --secondary-color: #166088;
+            --accent-color: #4fc3a1;
+            --dark-color: #324376;
+            --light-color: #f8f9fa;
+            --text-color: #333;
+            --user-api: #6b5b95;
+            --product-api: #feb236;
+            --cart-api: #ff7b25;
+            --order-api: #6decb9;
+            --payment-api: #d64161;
+            --shipping-api: #82b74b;
+            --notification-api: #40b3a2;
+            --analytics-api: #c1946a;
+            --security-api: #e3242b;
+            --search-api: #3498db;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            color: var(--text-color);
+            background-color: var(--light-color);
+        }
+        
+        header {
+            background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 2rem 0;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        h1, h2, h3 {
+            color: var(--dark-color);
+        }
+        
+        h1 {
+            margin-bottom: 0.5rem;
+            font-size: 2.2rem;
+        }
+        
+        .tagline {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+        
+        .section {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            padding: 25px;
+            margin-bottom: 30px;
+        }
+        
+        .diagram-container {
+            margin: 30px 0;
+            text-align: center;
+            overflow-x: auto;
+        }
+        
+        .api-box {
+            fill: white;
+            stroke-width: 2;
+            rx: 10;
+            ry: 10;
+        }
+        
+        .api-text {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-size: 14px;
+            fill: white;
+            text-anchor: middle;
+            font-weight: bold;
+        }
+        
+        .api-subtext {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-size: 12px;
+            fill: white;
+            text-anchor: middle;
+        }
+        
+        .api-endpoint {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-size: 10px;
+            fill: rgba(255, 255, 255, 0.8);
+            text-anchor: middle;
+        }
+        
+        .connector {
+            stroke-width: 1.5;
+            stroke: #888;
+            fill: none;
+        }
+        
+        .arrow-marker {
+            fill: #888;
+        }
+        
+        .gateway-box {
+            fill: var(--dark-color);
+            stroke: var(--dark-color);
+            stroke-width: 2;
+        }
+        
+        .db-circle {
+            fill: #e0e0e0;
+            stroke: #a0a0a0;
+            stroke-width: 2;
+        }
+        
+        .db-text {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-size: 12px;
+            fill: #333;
+            text-anchor: middle;
+            dominant-baseline: middle;
+        }
+        
+        .db-icon {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-size: 20px;
+            fill: #333;
+            text-anchor: middle;
+            dominant-baseline: middle;
+        }
+        
+        .client-box {
+            fill: #f0f0f0;
+            stroke: #d0d0d0;
+            stroke-width: 2;
+        }
+        
+        .client-text {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-size: 14px;
+            fill: #333;
+            text-anchor: middle;
+            dominant-baseline: middle;
+        }
+        
+        .legend {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .legend-item {
+            display: flex;
+            align-items: center;
+            margin-right: 15px;
+        }
+        
+        .legend-color {
+            width: 20px;
+            height: 20px;
+            border-radius: 4px;
+            margin-right: 8px;
+        }
+        
+        .api-description {
+            margin-top: 40px;
+        }
+        
+        .api-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        
+        .api-table th, .api-table td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        .api-table th {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        
+        .api-table tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        
+        .api-card {
+            border-left: 5px solid var(--primary-color);
+            background-color: #f9f9f9;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 0 5px 5px 0;
+        }
+        
+        .user-api { border-color: var(--user-api); }
+        .product-api { border-color: var(--product-api); }
+        .cart-api { border-color: var(--cart-api); }
+        .order-api { border-color: var(--order-api); }
+        .payment-api { border-color: var(--payment-api); }
+        .shipping-api { border-color: var(--shipping-api); }
+        
+        footer {
+            background-color: var(--dark-color);
+            color: white;
+            text-align: center;
+            padding: 20px 0;
+            margin-top: 40px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>E-Commerce API Architecture</h1>
+            <p class="tagline">Comprehensive Diagram of Modern E-Commerce Microservices</p>
+        </div>
+    </header>
+    
+    <div class="container">
+        <div class="section">
+            <h2>E-Commerce API Architecture Overview</h2>
+            <p>This diagram illustrates a modern e-commerce platform's API architecture based on microservices. Each colored section represents a distinct service with its own API endpoints, database, and responsibilities.</p>
+            
+            <div class="legend">
+                <div class="legend-item">
+                    <div class="legend-color" style="background-color: var(--user-api);"></div>
+                    <span>User API</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background-color: var(--product-api);"></div>
+                    <span>Product API</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background-color: var(--cart-api);"></div>
+                    <span>Cart API</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background-color: var(--order-api);"></div>
+                    <span>Order API</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background-color: var(--payment-api);"></div>
+                    <span>Payment API</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background-color: var(--shipping-api);"></div>
+                    <span>Shipping API</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background-color: var(--notification-api);"></div>
+                    <span>Notification API</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background-color: var(--search-api);"></div>
+                    <span>Search API</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background-color: var(--analytics-api);"></div>
+                    <span>Analytics API</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background-color: var(--security-api);"></div>
+                    <span>Security API</span>
+                </div>
+            </div>
+            
+            <div class="diagram-container">
+                <svg width="1100" height="700" viewBox="0 0 1100 700">
+                    <!-- Define arrow marker -->
+                    <defs>
+                        <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+                            <polygon points="0 0, 10 3.5, 0 7" class="arrow-marker"/>
+                        </marker>
+                    </defs>
+                    
+                    <!-- Client Applications -->
+                    <rect x="50" y="50" width="160" height="60" rx="5" ry="5" class="client-box" />
+                    <text x="130" y="80" class="client-text">Web Client</text>
+                    
+                    <rect x="50" y="130" width="160" height="60" rx="5" ry="5" class="client-box" />
+                    <text x="130" y="160" class="client-text">Mobile App</text>
+                    
+                    <rect x="50" y="210" width="160" height="60" rx="5" ry="5" class="client-box" />
+                    <text x="130" y="240" class="client-text">3rd Party Integration</text>
+                    
+                    <!-- API Gateway -->
+                    <rect x="300" y="130" width="160" height="100" rx="10" ry="10" class="gateway-box" />
+                    <text x="380" y="170" class="api-text">API Gateway</text>
+                    <text x="380" y="190" class="api-subtext">Rate Limiting, Auth, Routing</text>
+                    
+                    <!-- Connect clients to gateway -->
+                    <path d="M210 80 L300 170" class="connector" marker-end="url(#arrowhead)" />
+                    <path d="M210 160 L300 170" class="connector" marker-end="url(#arrowhead)" />
+                    <path d="M210 240 L300 170" class="connector" marker-end="url(#arrowhead)" />
+                    
+                    <!-- User API -->
+                    <rect x="550" y="50" width="160" height="100" rx="10" ry="10" stroke="var(--user-api)" class="api-box" style="fill: var(--user-api);" />
+                    <text x="630" y="90" class="api-text">User API</text>
+                    <text x="630" y="110" class="api-subtext">Authentication, Profiles</text>
+                    <text x="630" y="130" class="api-endpoint">/api/users, /api/auth</text>
+                    
+                    <!-- Product API -->
+                    <rect x="550" y="170" width="160" height="100" rx="10" ry="10" stroke="var(--product-api)" class="api-box" style="fill: var(--product-api);" />
+                    <text x="630" y="210" class="api-text">Product API</text>
+                    <text x="630" y="230" class="api-subtext">Catalog, Inventory</text>
+                    <text x="630" y="250" class="api-endpoint">/api/products, /api/categories</text>
+                    
+                    <!-- Cart API -->
+                    <rect x="550" y="290" width="160" height="100" rx="10" ry="10" stroke="var(--cart-api)" class="api-box" style="fill: var(--cart-api);" />
+                    <text x="630" y="330" class="api-text">Cart API</text>
+                    <text x="630" y="350" class="api-subtext">Shopping Cart Management</text>
+                    <text x="630" y="370" class="api-endpoint">/api/cart</text>
+                    
+                    <!-- Order API -->
+                    <rect x="550" y="410" width="160" height="100" rx="10" ry="10" stroke="var(--order-api)" class="api-box" style="fill: var(--order-api);" />
+                    <text x="630" y="450" class="api-text">Order API</text>
+                    <text x="630" y="470" class="api-subtext">Order Processing</text>
+                    <text x="630" y="490" class="api-endpoint">/api/orders</text>
+                    
+                    <!-- Payment API -->
+                    <rect x="550" y="530" width="160" height="100" rx="10" ry="10" stroke="var(--payment-api)" class="api-box" style="fill: var(--payment-api);" />
+                    <text x="630" y="570" class="api-text">Payment API</text>
+                    <text x="630" y="590" class="api-subtext">Payment Processing</text>
+                    <text x="630" y="610" class="api-endpoint">/api/payments</text>
+                    
+                    <!-- Secondary APIs (right side) -->
+                    <!-- Shipping API -->
+                    <rect x="800" y="50" width="160" height="100" rx="10" ry="10" stroke="var(--shipping-api)" class="api-box" style="fill: var(--shipping-api);" />
+                    <text x="880" y="90" class="api-text">Shipping API</text>
+                    <text x="880" y="110" class="api-subtext">Delivery Management</text>
+                    <text x="880" y="130" class="api-endpoint">/api/shipping</text>
+                    
+                    <!-- Notification API -->
+                    <rect x="800" y="170" width="160" height="100" rx="10" ry="10" stroke="var(--notification-api)" class="api-box" style="fill: var(--notification-api);" />
+                    <text x="880" y="210" class="api-text">Notification API</text>
+                    <text x="880" y="230" class="api-subtext">Email, SMS, Push</text>
+                    <text x="880" y="250" class="api-endpoint">/api/notifications</text>
+                    
+                    <!-- Search API -->
+                    <rect x="800" y="290" width="160" height="100" rx="10" ry="10" stroke="var(--search-api)" class="api-box" style="fill: var(--search-api);" />
+                    <text x="880" y="330" class="api-text">Search API</text>
+                    <text x="880" y="350" class="api-subtext">Product Search, Filters</text>
+                    <text x="880" y="370" class="api-endpoint">/api/search</text>
+                    
+                    <!-- Analytics API -->
+                    <rect x="800" y="410" width="160" height="100" rx="10" ry="10" stroke="var(--analytics-api)" class="api-box" style="fill: var(--analytics-api);" />
+                    <text x="880" y="450" class="api-text">Analytics API</text>
+                    <text x="880" y="470" class="api-subtext">Reporting, Insights</text>
+                    <text x="880" y="490" class="api-endpoint">/api/analytics</text>
+                    
+                    <!-- Security API -->
+                    <rect x="800" y="530" width="160" height="100" rx="10" ry="10" stroke="var(--security-api)" class="api-box" style="fill: var(--security-api);" />
+                    <text x="880" y="570" class="api-text">Security API</text>
+                    <text x="880" y="590" class="api-subtext">Fraud Detection, Security</text>
+                    <text x="880" y="610" class="api-endpoint">/api/security</text>
+                    
+                    <!-- Connect Gateway to APIs -->
+                    <path d="M460 170 C500 170, 500 100, 550 100" class="connector" marker-end="url(#arrowhead)" />
+                    <path d="M460 170 C500 170, 500 220, 550 220" class="connector" marker-end="url(#arrowhead)" />
+                    <path d="M460 170 C500 170, 500 340, 550 340" class="connector" marker-end="url(#arrowhead)" />
+                    <path d="M460 170 C500 170, 500 460, 550 460" class="connector" marker-end="url(#arrowhead)" />
+                    <path d="M460 170 C500 170, 500 580, 550 580" class="connector" marker-end="url(#arrowhead)" />
+                    
+                    <path d="M460 170 C500 170, 500 100, 800 100" class="connector" marker-end="url(#arrowhead)" />
+                    <path d="M460 170 C500 170, 500 220, 800 220" class="connector" marker-end="url(#arrowhead)" />
+                    <path d="M460 170 C500 170, 500 340, 800 340" class="connector" marker-end="url(#arrowhead)" />
+                    <path d="M460 170 C500 170, 500 460, 800 460" class="connector" marker-end="url(#arrowhead)" />
+                    <path d="M460 170 C500 170, 500 580, 800 580" class="connector" marker-end="url(#arrowhead)" />
+                    
+                    <!-- Databases -->
+                    <circle cx="630" cy="650" r="20" class="db-circle" />
+                    <text x="630" y="650" class="db-icon">🗄️</text>
+                    <text x="630" y="680" class="db-text">Databases</text>
+                    
+                    <!-- Message Queue -->
+                    <circle cx="880" cy="650" r="20" class="db-circle" />
+                    <text x="880" y="650" class="db-icon">📨</text>
+                    <text x="880" y="680" class="db-text">Message Queue</text>
+                    
+                    <!-- API Interconnections (selective) -->
+                    <path d="M710 100 L800 220" class="connector" marker-end="url(#arrowhead)" stroke-dasharray="5,3" />
+                    <path d="M710 460 L800 580" class="connector" marker-end="url(#arrowhead)" stroke-dasharray="5,3" />
+                    <path d="M710 340 L800 100" class="connector" marker-end="url(#arrowhead)" stroke-dasharray="5,3" />
+                    <path d="M710 580 L800 460" class="connector" marker-end="url(#arrowhead)" stroke-dasharray="5,3" />
+                </svg>
+            </div>
+        </div>
+        
+        <div class="section">
+            <h2>E-Commerce API Components</h2>
+            <p>Modern e-commerce platforms are built using microservices architecture, which allows for better scalability, maintenance, and deployment. Each API handles a specific domain of functionality:</p>
+            
+            <div class="api-card user-api">
+                <h3>User API</h3>
+                <p>Manages user accounts, authentication, profiles, and permissions.</p>
+                <ul>
+                    <li><strong>Key Endpoints:</strong> /api/users, /api/auth, /api/profile</li>
+                    <li><strong>Authentication:</strong> JWT, OAuth2, social login integration</li>
+                    <li><strong>Services:</strong> Registration, login, password reset, profile management</li>
+                </ul>
+            </div>
+            
+            <div class="api-card product-api">
+                <h3>Product API</h3>
+                <p>Handles product catalog, categories, and inventory management.</p>
+                <ul>
+                    <li><strong>Key Endpoints:</strong> /api/products, /api/categories, /api/inventory</li>
+                    <li><strong>Features:</strong> Product information, pricing, inventory tracking, images</li>
+                    <li><strong>Services:</strong> Product listing, details, inventory updates, category management</li>
+                </ul>
+            </div>
+            
+            <div class="api-card cart-api">
+                <h3>Cart API</h3>
+                <p>Manages the shopping cart functionality for users.</p>
+                <ul>
+                    <li><strong>Key Endpoints:</strong> /api/cart, /api/cart/items, /api/cart/checkout</li>
+                    <li><strong>Features:</strong> Add, remove, update cart items, cart persistence</li>
+                    <li><strong>Services:</strong> Cart management, session handling, price calculation</li>
+                </ul>
+            </div>
+            
+            <div class="api-card order-api">
+                <h3>Order API</h3>
+                <p>Processes and manages customer orders throughout their lifecycle.</p>
+                <ul>
+                    <li><strong>Key Endpoints:</strong> /api/orders, /api/orders/{id}, /api/orders/history</li>
+                    <li><strong>Features:</strong> Order creation, status updates, history, tracking</li>
+                    <li><strong>Services:</strong> Order processing, status management, history retrieval</li>
+                </ul>
+            </div>
+            
+            <div class="api-card payment-api">
+                <h3>Payment API</h3>
+                <p>Handles payment processing, transactions, and refunds.</p>
+                <ul>
+                    <li><strong>Key Endpoints:</strong> /api/payments, /api/payments/methods, /api/payments/transactions</li>
+                    <li><strong>Features:</strong> Multiple payment methods, transaction processing, security</li>
+                    <li><strong>Integrations:</strong> Payment gateways (Stripe, PayPal, etc.), fraud detection</li>
+                </ul>
+            </div>
+            
+            <div class="api-card shipping-api">
+                <h3>Shipping API</h3>
+                <p>Manages shipping options, rates, and delivery tracking.</p>
+                <ul>
+                    <li><strong>Key Endpoints:</strong> /api/shipping, /api/shipping/rates, /api/shipping/track</li>
+                    <li><strong>Features:</strong> Shipping methods, rate calculation, tracking integration</li>
+                    <li><strong>Integrations:</strong> Shipping carriers (USPS, FedEx, UPS, etc.)</li>
+                </ul>
+            </div>
+            
+            <h3>Architecture Considerations</h3>
+            <ul>
+                <li><strong>API Gateway:</strong> Single entry point for all client requests, handles routing, authentication, and rate limiting</li>
+                <li><strong>Microservices:</strong> Each service is independently deployable and scalable</li>
+                <li><strong>Databases:</strong> Services typically have their own databases to ensure loose coupling</li>
+                <li><strong>Message Queue:</strong> Facilitates asynchronous communication between services</li>
+                <li><strong>Security:</strong> Authentication, authorization, and encryption at all levels</li>
+                <li><strong>Scalability:</strong> Services can scale independently based on demand</li>
+            </ul>
+        </div>
+    </div>
+    
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 E-Commerce API Architecture. All rights reserved.</p>
+        </div>
+    </footer>
+</body>
+</html>
