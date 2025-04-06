@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LangGraph Simple Chatbot</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+    <style>
+        .gradient-bg {
+            background: linear-gradient(135deg, #6366F1 0%, #A855F7 100%);
+        }
+        .chat-container {
+            height: calc(100vh - 200px);
+            max-height: 600px;
+        }
+        .chat-messages {
+            height: calc(100% - 80px);
+            overflow-y: auto;
+        }
+        .user-message {
+            background-color: #E5E7EB;
+            border-radius: 18px 18px 0 18px;
+            max-width: 80%;
+            align-self: flex-end;
+        }
+        .bot-message {
+            background-color: #EDE9FE;
+            border-radius: 18px 18px 18px 0;
+            max-width: 80%;
+            align-self: flex-start;
+            border-left: 4px solid #8B5CF6;
+        }
+        .thinking {
+            animation: pulse 1.5s infinite;
+        }
+        @keyframes pulse {
+            0% { opacity: 0.3; }
+            50% { opacity: 1; }
+            100% { opacity: 0.3; }
+        }
+        .node {
+            fill: #EDE9FE;
+            stroke: #8B5CF6;
+            stroke-width: 2px;
+        }
+        .node.active {
+            fill: #C4B5FD;
+            stroke: #6D28D9;
+        }
+        .edge {
+            stroke: #A78BFA;
+            stroke-width: 2px;
+        }
+        .label {
+            font-size: 10px;
+            font-family: Arial, sans-serif;
+            fill: #4B5563;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 min-h-screen">
+    <header class="gradient-bg text-white py-8">
+        <div class="container mx-auto px-4 text-center">
+            <h1 class="text-4xl font-bold mb-2">LangGraph Simple Chatbot</h1>
+            <p class="text-xl">A demonstration of a conversational agent with LangGraph flow</p>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-4 py-8">
+        <div class="grid md:grid-cols-5 gap-6">
+            <!-- Chat Interface -->
+            <div class="md:col-span-3 bg-white rounded-lg shadow-md p-6">
+                <div class="chat-container flex flex-col">
+                    <div class="chat-messages flex flex-col space-y-4 mb-4 p-2" id="chat-messages">
+                        <div class="bot-message p-3 text-gray-800">
+                            <p>Hello! I'm a simple LangGraph-powered chatbot. I can help answer questions and have a conversation with you. How can I assist you today?</p>
+                        </div>
+                    </div>
+                    <div class="chat-input mt-auto">
+                        <form id="chat-form" class="flex items-center">
+                            <input 
+                                type="text" 
+                                id="user-input" 
+                                class="flex-grow p-3 border border-gray-300 rounded-l-lg focus:outline-none focus:ring-2 focus:ring-purple-500" 
+                                placeholder="Type your message here..."
+                            >
+                            <button 
+                                type="submit"
+                                class="bg-purple-600 text-white p-3 rounded-r-lg hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500"
+                            >
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+                                </svg>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Graph Visualization -->
+            <div class="md:col-span-2 bg-white rounded-lg shadow-md p-6">
+                <h2 class="text-2xl font-bold mb-4 text-gray-800">LangGraph Flow</h2>
+                <div class="border rounded-lg p-4 h-full" id="graph-container">
+                    <svg id="graph-svg" width="100%" height="300">
+                        <!-- Nodes -->
+                        <g id="nodes">
+                            <circle class="node" cx="100" cy="50" r="30"></circle>
+                            <circle class="node" cx="200" cy="150" r="30"></circle>
+                            <circle class="node" cx="100" cy="250" r="30"></circle>
+                            <circle class="node" cx="300" cy="50" r="30"></circle>
+                            
+                            <!-- Node Labels -->
+                            <text class="label" x="100" y="55" text-anchor="middle">Input</text>
+                            <text class="label" x="200" y="155" text-anchor="middle">Process</text>
+                            <text class="label" x="100" y="255" text-anchor="middle">Memory</text>
+                            <text class="label" x="300" y="55" text-anchor="middle">Output</text>
+                        </g>
+                        
+                        <!-- Edges -->
+                        <g id="edges">
+                            <path class="edge" d="M130,50 Q165,100 170,150"></path>
+                            <path class="edge" d="M200,180 Q150,215 130,250"></path>
+                            <path class="edge" d="M230,150 Q265,100 270,50"></path>
+                            <path class="edge" d="M130,250 Q50,150 70,50"></path>
+                        </g>
+                    </svg>
+                    <div class="mt-4">
+                        <p class="text-sm text-gray-600">
+                            This simplified visualization shows the flow of information in a LangGraph chatbot:
+                        </p>
+                        <ul class="text-sm text-gray-600 list-disc pl-5 mt-2">
+                            <li><strong>Input:</strong> User message is received</li>
+                            <li><strong>Process:</strong> Message is analyzed and response generated</li>
+                            <li><strong>Memory:</strong> Conversation context is stored</li>
+                            <li><strong>Output:</strong> Response is sent to user</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="bg-gray-800 text-white py-6 mt-8">
+        <div class="container mx-auto px-4 text-center">
+            <p>Demo MCP Web - LangGraph Simple Chatbot</p>
+            <p class="text-gray-400 text-sm mt-2">© 2025 Demo Project</p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const chatForm = document.getElementById('chat-form');
+            const userInput = document.getElementById('user-input');
+            const chatMessages = document.getElementById('chat-messages');
+            const nodes = document.querySelectorAll('.node');
+            
+            // Mock responses for demo purposes
+            const botResponses = [
+                "I understand you're asking about LangGraph. It's a library for building stateful, multi-step AI applications using directed graphs.",
+                "LangGraph helps you build complex AI workflows by connecting different components together in a graph structure.",
+                "That's an interesting question! LangGraph extends LangChain's capabilities with stateful, multi-actor workflows.",
+                "LangGraph allows you to create agents that can maintain state across multiple interactions, which is perfect for chatbots.",
+                "The main advantage of LangGraph is how it visualizes and manages the flow of information between different components.",
+                "In a typical LangGraph application, you define nodes (components) and edges (relationships) to create the flow of information."
+            ];
+            
+            // Add event listener for form submission
+            chatForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                // Get user input
+                const message = userInput.value.trim();
+                if (message === '') return;
+                
+                // Add user message to chat
+                addMessage('user', message);
+                
+                // Clear input field
+                userInput.value = '';
+                
+                // Add thinking indicator
+                const thinkingEl = document.createElement('div');
+                thinkingEl.className = 'bot-message p-3 text-gray-800 thinking';
+                thinkingEl.innerHTML = '<p>Thinking...</p>';
+                chatMessages.appendChild(thinkingEl);
+                
+                // Scroll to bottom
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+                
+                // Animate the graph nodes to show processing
+                animateGraph();
+                
+                // Simulate bot thinking and responding after a delay
+                setTimeout(() => {
+                    // Remove thinking indicator
+                    chatMessages.removeChild(thinkingEl);
+                    
+                    // Get random response
+                    const response = botResponses[Math.floor(Math.random() * botResponses.length)];
+                    
+                    // Add bot message
+                    addMessage('bot', response);
+                    
+                    // Reset graph
+                    resetGraph();
+                }, 1500);
+            });
+            
+            // Function to add a message to the chat
+            function addMessage(sender, text) {
+                const messageEl = document.createElement('div');
+                messageEl.className = sender === 'user' ? 'user-message p-3 text-gray-800 self-end' : 'bot-message p-3 text-gray-800';
+                messageEl.innerHTML = `<p>${text}</p>`;
+                chatMessages.appendChild(messageEl);
+                
+                // Scroll to bottom
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }
+            
+            // Function to animate the graph
+            function animateGraph() {
+                // Reset all nodes
+                nodes.forEach(node => node.classList.remove('active'));
+                
+                // Input node active
+                nodes[0].classList.add('active');
+                
+                // Process node active after delay
+                setTimeout(() => {
+                    nodes[0].classList.remove('active');
+                    nodes[1].classList.add('active');
+                }, 400);
+                
+                // Memory node active after delay
+                setTimeout(() => {
+                    nodes[1].classList.remove('active');
+                    nodes[2].classList.add('active');
+                }, 800);
+                
+                // Output node active after delay
+                setTimeout(() => {
+                    nodes[2].classList.remove('active');
+                    nodes[3].classList.add('active');
+                }, 1200);
+            }
+            
+            // Function to reset the graph
+            function resetGraph() {
+                nodes.forEach(node => node.classList.remove('active'));
+            }
+        });
+    </script>
+</body>
+</html>
