@@ -3,415 +3,80 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LangRev - Planner Agent Architecture</title>
+    <title>Demo MCP Web - HTML Pages</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/mermaid/9.4.3/mermaid.min.js"></script>
     <style>
-        .mermaid {
-            max-width: 100%;
-            margin: 0 auto;
-        }
         .gradient-bg {
             background: linear-gradient(135deg, #6366F1 0%, #A855F7 100%);
         }
-        .component-card {
-            border-left: 4px solid #6366F1;
+        .menu-item {
+            transition: all 0.3s ease;
+        }
+        .menu-item:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
         }
     </style>
 </head>
-<body class="bg-gray-50">
+<body class="bg-gray-100 min-h-screen">
     <header class="gradient-bg text-white py-8">
-        <div class="container mx-auto px-4">
-            <h1 class="text-4xl font-bold mb-2">LangRev Planner Agent</h1>
-            <p class="text-xl">Detailed Architecture & Component Breakdown</p>
+        <div class="container mx-auto px-4 text-center">
+            <h1 class="text-4xl font-bold mb-2">Demo MCP Web</h1>
+            <p class="text-xl">Available HTML Pages</p>
         </div>
     </header>
 
-    <main class="container mx-auto px-4 py-8">
-        <section class="mb-12">
-            <h2 class="text-3xl font-bold mb-6 text-center">Planner Agent Architecture</h2>
-            <div class="bg-white p-6 rounded-lg shadow-lg">
-                <pre class="mermaid">
-flowchart TD
-    subgraph "Planner Agent Architecture"
-        subgraph "Input Processing"
-            UserQuery([User Query])
-            QueryContext([Context History])
-            APIRegistry[(API Registry)]
+    <main class="container mx-auto px-4 py-12">
+        <div class="grid md:grid-cols-2 gap-6">
+            <!-- Index Page -->
+            <a href="index.html" class="bg-white rounded-lg shadow-md p-6 menu-item border-l-4 border-indigo-500">
+                <h2 class="text-2xl font-bold text-indigo-700 mb-2">Home Page</h2>
+                <p class="text-gray-700 mb-4">The main landing page of the repository.</p>
+                <div class="flex justify-end">
+                    <span class="px-3 py-1 bg-indigo-100 text-indigo-800 rounded-full text-sm">index.html</span>
+                </div>
+            </a>
             
-            UserQuery --> QueryPreprocessor[Query Preprocessor]
-            QueryContext --> QueryPreprocessor
+            <!-- E-commerce API Diagram -->
+            <a href="ecommerce-api-diagram.html" class="bg-white rounded-lg shadow-md p-6 menu-item border-l-4 border-purple-500">
+                <h2 class="text-2xl font-bold text-purple-700 mb-2">E-commerce API Diagram</h2>
+                <p class="text-gray-700 mb-4">Visual representation of e-commerce API architecture.</p>
+                <div class="flex justify-end">
+                    <span class="px-3 py-1 bg-purple-100 text-purple-800 rounded-full text-sm">ecommerce-api-diagram.html</span>
+                </div>
+            </a>
             
-            QueryPreprocessor --> IntentClassifier[Intent Classifier]
-            QueryPreprocessor --> EntityExtractor[Entity Extractor]
+            <!-- Real World Use Case -->
+            <a href="real-world-usecase.html" class="bg-white rounded-lg shadow-md p-6 menu-item border-l-4 border-green-500">
+                <h2 class="text-2xl font-bold text-green-700 mb-2">Real World Use Case</h2>
+                <p class="text-gray-700 mb-4">Example of real-world implementation and use cases.</p>
+                <div class="flex justify-end">
+                    <span class="px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm">real-world-usecase.html</span>
+                </div>
+            </a>
             
-            IntentClassifier --> IntentEntity[Intent & Entity Resolution]
-            EntityExtractor --> IntentEntity
-        end
-        
-        subgraph "API Matching"
-            IntentEntity --> CapabilityMatcher[API Capability Matcher]
-            APIRegistry --> CapabilityMatcher
-            CapabilityMatcher --> CandidateAPIs[Candidate API Set]
-        end
-        
-        subgraph "Plan Generation"
-            CandidateAPIs --> DependencyResolver[Dependency Resolver]
-            DependencyResolver --> SequenceOptimizer[Sequence Optimizer]
-            SequenceOptimizer --> ParameterMapper[Parameter Mapper]
-            ParameterMapper --> FallbackPlanner[Fallback Planner]
-            FallbackPlanner --> ValidationChecker[Validation Checker]
-            ValidationChecker --> PlanAssembler[Plan Assembler]
-        end
-        
-        PlanAssembler --> ExecutionPlan[Execution Plan]
-    end
-    
-    classDef input fill:#e3f2fd,stroke:#333,stroke-width:1px
-    classDef processing fill:#f9d5e5,stroke:#333,stroke-width:1px
-    classDef matching fill:#fff9c4,stroke:#333,stroke-width:1px
-    classDef planning fill:#c8e6c9,stroke:#333,stroke-width:1px
-    classDef output fill:#ffcc80,stroke:#333,stroke-width:2px
-    
-    class UserQuery,QueryContext,APIRegistry input
-    class QueryPreprocessor,IntentClassifier,EntityExtractor,IntentEntity processing
-    class CapabilityMatcher,CandidateAPIs matching
-    class DependencyResolver,SequenceOptimizer,ParameterMapper,FallbackPlanner,ValidationChecker,PlanAssembler planning
-    class ExecutionPlan output
-                </pre>
-            </div>
-        </section>
-
-        <section class="mb-12">
-            <h2 class="text-3xl font-bold mb-6">Component Descriptions</h2>
-            
-            <div class="bg-indigo-50 p-4 mb-8 rounded-lg">
-                <h3 class="text-xl font-bold text-indigo-800 mb-2">1. Input Processing Components</h3>
-                <p class="mb-2 text-gray-700">These components analyze the user's query and extract meaningful information from it.</p>
-            </div>
-            
-            <div class="grid md:grid-cols-2 gap-6 mb-10">
-                <div class="bg-white p-5 rounded-lg shadow component-card">
-                    <h4 class="font-bold text-lg mb-2">Query Preprocessor</h4>
-                    <p class="text-gray-700">Takes the raw user query and performs initial processing tasks such as:</p>
-                    <ul class="list-disc ml-5 mt-2 space-y-1 text-gray-600">
-                        <li>Text normalization (lowercasing, removing extra spaces)</li>
-                        <li>Tokenization (breaking the query into words/phrases)</li>
-                        <li>Language detection for multilingual support</li>
-                        <li>Incorporating conversation context from previous interactions</li>
-                        <li>Expanding abbreviations and handling synonyms</li>
-                    </ul>
+            <!-- Simple Use Case -->
+            <a href="simple-use-case.html" class="bg-white rounded-lg shadow-md p-6 menu-item border-l-4 border-yellow-500">
+                <h2 class="text-2xl font-bold text-yellow-700 mb-2">Simple Use Case</h2>
+                <p class="text-gray-700 mb-4">Basic examples and simple use case scenarios.</p>
+                <div class="flex justify-end">
+                    <span class="px-3 py-1 bg-yellow-100 text-yellow-800 rounded-full text-sm">simple-use-case.html</span>
                 </div>
-                
-                <div class="bg-white p-5 rounded-lg shadow component-card">
-                    <h4 class="font-bold text-lg mb-2">Intent Classifier</h4>
-                    <p class="text-gray-700">Determines what the user is trying to accomplish. For example:</p>
-                    <ul class="list-disc ml-5 mt-2 space-y-1 text-gray-600">
-                        <li>Searching for products (search_intent)</li>
-                        <li>Checking order status (order_status_intent)</li>
-                        <li>Comparing items (comparison_intent)</li>
-                        <li>Requesting specific information (info_intent)</li>
-                        <li>Uses semantic understanding of language, not just keywords</li>
-                    </ul>
-                </div>
-                
-                <div class="bg-white p-5 rounded-lg shadow component-card">
-                    <h4 class="font-bold text-lg mb-2">Entity Extractor</h4>
-                    <p class="text-gray-700">Identifies specific data points and parameters from the query:</p>
-                    <ul class="list-disc ml-5 mt-2 space-y-1 text-gray-600">
-                        <li>Product attributes (price, color, size)</li>
-                        <li>Time references (dates, durations)</li>
-                        <li>Quantities and numerical values</li>
-                        <li>Named entities (brands, people, locations)</li>
-                        <li>Custom domain-specific entities</li>
-                    </ul>
-                </div>
-                
-                <div class="bg-white p-5 rounded-lg shadow component-card">
-                    <h4 class="font-bold text-lg mb-2">Intent & Entity Resolution</h4>
-                    <p class="text-gray-700">Combines and reconciles the outputs from intent and entity analysis:</p>
-                    <ul class="list-disc ml-5 mt-2 space-y-1 text-gray-600">
-                        <li>Resolves ambiguities between conflicting entities</li>
-                        <li>Infers missing but implied entities based on intent</li>
-                        <li>Validates that extracted entities make sense for the identified intent</li>
-                        <li>Assigns confidence scores to intent and entity matches</li>
-                        <li>Creates a structured representation of user needs</li>
-                    </ul>
-                </div>
-            </div>
-            
-            <div class="bg-yellow-50 p-4 mb-8 rounded-lg">
-                <h3 class="text-xl font-bold text-yellow-800 mb-2">2. API Matching Components</h3>
-                <p class="mb-2 text-gray-700">These components find the most appropriate APIs to fulfill the user's request.</p>
-            </div>
-            
-            <div class="grid md:grid-cols-2 gap-6 mb-10">
-                <div class="bg-white p-5 rounded-lg shadow component-card">
-                    <h4 class="font-bold text-lg mb-2">API Capability Matcher</h4>
-                    <p class="text-gray-700">Maps user intent and entities to available API capabilities:</p>
-                    <ul class="list-disc ml-5 mt-2 space-y-1 text-gray-600">
-                        <li>Builds a semantic understanding of what each API does</li>
-                        <li>Calculates relevance scores between user intent and API functions</li>
-                        <li>Considers parameter compatibility with extracted entities</li>
-                        <li>Evaluates historical performance of APIs for similar queries</li>
-                        <li>Applies domain-specific rules for API selection</li>
-                    </ul>
-                </div>
-                
-                <div class="bg-white p-5 rounded-lg shadow component-card">
-                    <h4 class="font-bold text-lg mb-2">Candidate API Set</h4>
-                    <p class="text-gray-700">Represents the collection of potentially useful APIs:</p>
-                    <ul class="list-disc ml-5 mt-2 space-y-1 text-gray-600">
-                        <li>Ranked list of API endpoints that could fulfill the request</li>
-                        <li>Metadata about each API's capabilities and requirements</li>
-                        <li>Expected inputs and outputs for each API</li>
-                        <li>Alternative API options for each part of the request</li>
-                        <li>Potential combinations of APIs that might work together</li>
-                    </ul>
-                </div>
-            </div>
-            
-            <div class="bg-green-50 p-4 mb-8 rounded-lg">
-                <h3 class="text-xl font-bold text-green-800 mb-2">3. Plan Generation Components</h3>
-                <p class="mb-2 text-gray-700">These components create a comprehensive and optimized plan for API execution.</p>
-            </div>
-            
-            <div class="grid md:grid-cols-2 gap-6 mb-10">
-                <div class="bg-white p-5 rounded-lg shadow component-card">
-                    <h4 class="font-bold text-lg mb-2">Dependency Resolver</h4>
-                    <p class="text-gray-700">Determines the relationships between different API calls:</p>
-                    <ul class="list-disc ml-5 mt-2 space-y-1 text-gray-600">
-                        <li>Identifies which APIs need outputs from other APIs</li>
-                        <li>Creates a directed graph of data dependencies</li>
-                        <li>Detects and resolves circular dependencies</li>
-                        <li>Determines which API calls can run in parallel</li>
-                        <li>Tags required data transformations between API calls</li>
-                    </ul>
-                </div>
-                
-                <div class="bg-white p-5 rounded-lg shadow component-card">
-                    <h4 class="font-bold text-lg mb-2">Sequence Optimizer</h4>
-                    <p class="text-gray-700">Finds the most efficient execution order:</p>
-                    <ul class="list-disc ml-5 mt-2 space-y-1 text-gray-600">
-                        <li>Minimizes the total number of API calls</li>
-                        <li>Arranges for parallel execution where possible</li>
-                        <li>Prioritizes faster and more reliable APIs</li>
-                        <li>Considers API rate limits and quotas</li>
-                        <li>Optimizes for minimal latency in the overall plan</li>
-                    </ul>
-                </div>
-                
-                <div class="bg-white p-5 rounded-lg shadow component-card">
-                    <h4 class="font-bold text-lg mb-2">Parameter Mapper</h4>
-                    <p class="text-gray-700">Maps available data to API parameters:</p>
-                    <ul class="list-disc ml-5 mt-2 space-y-1 text-gray-600">
-                        <li>Formats entity values to match API parameter requirements</li>
-                        <li>Creates JSONPath/XPath expressions for dependent parameters</li>
-                        <li>Sets default values for optional parameters</li>
-                        <li>Handles type conversions and formatting</li>
-                        <li>Validates parameter values against API constraints</li>
-                    </ul>
-                </div>
-                
-                <div class="bg-white p-5 rounded-lg shadow component-card">
-                    <h4 class="font-bold text-lg mb-2">Fallback Planner</h4>
-                    <p class="text-gray-700">Designs alternative pathways for error cases:</p>
-                    <ul class="list-disc ml-5 mt-2 space-y-1 text-gray-600">
-                        <li>Identifies critical failure points in the plan</li>
-                        <li>Creates alternative API sequences for common errors</li>
-                        <li>Sets up retry strategies with exponential backoff</li>
-                        <li>Provides default responses for failed API calls</li>
-                        <li>Prioritizes graceful degradation of functionality</li>
-                    </ul>
-                </div>
-                
-                <div class="bg-white p-5 rounded-lg shadow component-card">
-                    <h4 class="font-bold text-lg mb-2">Validation Checker</h4>
-                    <p class="text-gray-700">Ensures the plan will likely succeed:</p>
-                    <ul class="list-disc ml-5 mt-2 space-y-1 text-gray-600">
-                        <li>Verifies all required parameters have values</li>
-                        <li>Confirms API dependency chains are valid</li>
-                        <li>Checks for potential security or permission issues</li>
-                        <li>Estimates plan execution time and resource usage</li>
-                        <li>Identifies edge cases that might cause problems</li>
-                    </ul>
-                </div>
-                
-                <div class="bg-white p-5 rounded-lg shadow component-card">
-                    <h4 class="font-bold text-lg mb-2">Plan Assembler</h4>
-                    <p class="text-gray-700">Creates the final structured execution plan:</p>
-                    <ul class="list-disc ml-5 mt-2 space-y-1 text-gray-600">
-                        <li>Formats the plan in the expected JSON structure</li>
-                        <li>Adds metadata and context for debugging</li>
-                        <li>Includes success criteria for evaluation</li>
-                        <li>Organizes all fallback options</li>
-                        <li>Provides explanations for plan decisions</li>
-                    </ul>
-                </div>
-            </div>
-            
-            <div class="bg-orange-50 p-4 mb-8 rounded-lg">
-                <h3 class="text-xl font-bold text-orange-800 mb-2">4. Output Component</h3>
-                <p class="mb-2 text-gray-700">The final product of the Planner Agent process.</p>
-            </div>
-            
-            <div class="bg-white p-5 rounded-lg shadow component-card mb-6">
-                <h4 class="font-bold text-lg mb-2">Execution Plan</h4>
-                <p class="text-gray-700">The comprehensive blueprint for fulfilling the user's request:</p>
-                <ul class="list-disc ml-5 mt-2 space-y-1 text-gray-600">
-                    <li>Complete sequence of API calls with all parameters</li>
-                    <li>Data dependencies between calls</li>
-                    <li>Fallback options for error handling</li>
-                    <li>Success criteria for validating responses</li>
-                    <li>Response processing instructions</li>
-                </ul>
-            </div>
-        </section>
-
-        <section class="mb-12">
-            <h2 class="text-3xl font-bold mb-6">Execution Plan Output Example</h2>
-            <div class="bg-white p-6 rounded-lg shadow-lg">
-                <h3 class="text-xl font-bold mb-4 text-indigo-700">For Query: "Show me affordable laptops with good battery life"</h3>
-                <pre class="bg-gray-100 p-4 rounded text-sm overflow-auto">
-{
-  "user_intent": "product_search",
-  "extracted_entities": {
-    "product_type": "laptops",
-    "attributes": [
-      {"name": "price", "value": "affordable", "normalized_value": "price_range:budget"},
-      {"name": "battery_life", "value": "good", "normalized_value": "min_hours:6"}
-    ]
-  },
-  "execution_plan": {
-    "api_calls": [
-      {
-        "id": "api_call_0",
-        "endpoint": "/products/search",
-        "method": "GET",
-        "parameters": {
-          "category": "electronics",
-          "subcategory": "laptops",
-          "price_min": 0,
-          "price_max": 800,
-          "sort": "popularity_desc",
-          "page": 1,
-          "page_size": 20
-        },
-        "depends_on": null,
-        "expected_response": "product_array"
-      },
-      {
-        "id": "api_call_1",
-        "endpoint": "/products/filters",
-        "method": "GET",
-        "parameters": {
-          "product_ids": "$.api_call_0.response.products[*].id",
-          "filter_type": "battery_life"
-        },
-        "depends_on": "api_call_0",
-        "expected_response": "filter_options"
-      },
-      {
-        "id": "api_call_2",
-        "endpoint": "/products/filter",
-        "method": "POST",
-        "parameters": {
-          "product_ids": "$.api_call_0.response.products[*].id",
-          "filters": {
-            "battery_life_min_hours": 6
-          }
-        },
-        "depends_on": "api_call_0",
-        "expected_response": "filtered_product_array"
-      }
-    ],
-    "fallbacks": [
-      {
-        "if_failed": "api_call_1",
-        "then_use": {
-          "endpoint": "/products/attributes",
-          "method": "GET",
-          "parameters": {
-            "product_ids": "$.api_call_0.response.products[*].id",
-            "attributes": ["battery_life"]
-          }
-        }
-      },
-      {
-        "if_failed": "api_call_2",
-        "then_use": {
-          "static_filter": {
-            "description": "Apply client-side filtering for battery life using product descriptions",
-            "method": "keyword_match",
-            "keywords": ["long battery", "battery life", "all-day battery", "extended battery"]
-          }
-        }
-      }
-    ],
-    "success_criteria": {
-      "primary_condition": "$.api_call_2.response.products.length > 0",
-      "secondary_condition": "$.api_call_0.response.products.length > 0",
-      "error_message": "No laptops found matching your criteria. Would you like to see our most popular laptops instead?"
-    },
-    "response_requirements": {
-      "primary_data": "$.api_call_2.response.products",
-      "fallback_data": "$.api_call_0.response.products",
-      "highlighting": ["battery_life", "price"],
-      "suggested_ui": "product_grid"
-    }
-  }
-}
-                </pre>
-            </div>
-        </section>
-
-        <section class="mb-12 bg-white p-6 rounded-lg shadow-lg">
-            <h2 class="text-3xl font-bold mb-6">Implementation Approaches</h2>
-            
-            <div class="grid md:grid-cols-2 gap-8">
-                <div>
-                    <h3 class="text-xl font-bold mb-4 text-indigo-700">LLM-Centric Approach</h3>
-                    <p class="mb-4">This approach uses a large language model as the primary reasoning engine:</p>
-                    <ul class="list-disc ml-5 space-y-2">
-                        <li><strong>Prompt Engineering</strong> - Carefully designed prompts guide the LLM through each step of the planning process</li>
-                        <li><strong>Few-Shot Learning</strong> - Examples of good plans are included in context to improve output quality</li>
-                        <li><strong>Chain-of-Thought</strong> - The LLM is prompted to explain its reasoning at each step</li>
-                        <li><strong>Output Parsing</strong> - Structured output formats ensure the LLM generates valid JSON plans</li>
-                        <li><strong>Verification Loops</strong> - Additional LLM calls verify and improve the initial plan</li>
-                    </ul>
-                </div>
-                
-                <div>
-                    <h3 class="text-xl font-bold mb-4 text-indigo-700">Hybrid Approach</h3>
-                    <p class="mb-4">This approach combines LLMs with traditional algorithms:</p>
-                    <ul class="list-disc ml-5 space-y-2">
-                        <li><strong>Intent Classification</strong> - Fine-tuned language models for domain-specific intent recognition</li>
-                        <li><strong>Entity Extraction</strong> - Named entity recognition systems combined with regex patterns</li>
-                        <li><strong>Graph Algorithms</strong> - For dependency resolution and sequence optimization</li>
-                        <li><strong>Rule-Based Systems</strong> - For validation and constraint checking</li>
-                        <li><strong>Vector Embeddings</strong> - For semantic matching between intents and API capabilities</li>
-                    </ul>
-                </div>
-            </div>
-        </section>
+            </a>
+        </div>
     </main>
 
     <footer class="bg-gray-800 text-white py-6">
         <div class="container mx-auto px-4 text-center">
-            <p>LangRev - Automated API Integration System</p>
-            <p class="text-gray-400 text-sm mt-2">© 2025 LangRev</p>
+            <p>Demo MCP Web - HTML Page Navigator</p>
+            <p class="text-gray-400 text-sm mt-2">© 2025 Demo Project</p>
         </div>
     </footer>
 
     <script>
-        mermaid.initialize({
-            startOnLoad: true,
-            theme: 'default',
-            securityLevel: 'loose',
-            flowchart: {
-                useMaxWidth: false,
-                htmlLabels: true
-            }
+        // JavaScript to add dynamic content or behavior if needed in the future
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('Page loaded successfully');
         });
     </script>
 </body>
