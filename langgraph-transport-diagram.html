@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LangGraph Transport Agent Diagram</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
+    <style>
+        .gradient-bg {
+            background: linear-gradient(135deg, #6366F1 0%, #A855F7 100%);
+        }
+        .node {
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .node:hover {
+            filter: brightness(1.1);
+        }
+        .node-label {
+            font-size: 12px;
+            font-weight: bold;
+            pointer-events: none;
+        }
+        .edge {
+            stroke-width: 2;
+            transition: all 0.3s ease;
+        }
+        .edge-label {
+            font-size: 10px;
+            pointer-events: none;
+            text-anchor: middle;
+        }
+        .tooltip {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.95);
+            border: 1px solid #ddd;
+            color: #333;
+            border-radius: 6px;
+            padding: 10px;
+            font-size: 14px;
+            max-width: 300px;
+            z-index: 10;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        .card {
+            transition: all 0.3s ease;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        .highlighted {
+            stroke-width: 3;
+            stroke-dasharray: 5;
+            animation: dash 3s linear infinite;
+        }
+        @keyframes dash {
+            to {
+                stroke-dashoffset: 50;
+            }
+        }
+        .info-panel {
+            background-color: rgba(255, 255, 255, 0.95);
+            border-left: 4px solid #8B5CF6;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 min-h-screen">
+    <header class="gradient-bg text-white py-8">
+        <div class="container mx-auto px-4 text-center">
+            <h1 class="text-4xl font-bold mb-2">LangGraph Transport Agent Diagram</h1>
+            <p class="text-xl">Advanced Architecture for Intelligent Transport Planning and Optimization</p>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-4 py-8">
+        <div class="bg-white rounded-lg shadow-md p-6 mb-6">
+            <div class="flex flex-col md:flex-row">
+                <div class="w-full md:w-3/4 pr-0 md:pr-6">
+                    <h2 class="text-2xl font-bold mb-4 text-gray-800">Transport Agent Architecture</h2>
+                    <p class="text-gray-700 mb-4">
+                        This diagram illustrates a LangGraph-powered transport optimization agent that coordinates multiple specialized components to solve complex transportation and logistics problems. Click on any node to see details.
+                    </p>
+                    <div id="graph-container" class="w-full h-[500px] border rounded-lg">
+                        <!-- D3 will render the graph here -->
+                        <div id="tooltip" class="tooltip"></div>
+                    </div>
+                </div>
+                
+                <div class="w-full md:w-1/4 mt-6 md:mt-0">
+                    <div id="info-panel" class="info-panel rounded-lg p-4 bg-purple-50 border-gray-200 h-full overflow-y-auto">
+                        <h3 class="text-xl font-bold text-purple-800 mb-3">Component Details</h3>
+                        <p class="text-gray-700 mb-4">Click on any node in the diagram to view detailed information about that component.</p>
+                        <div id="node-details">
+                            <p class="text-sm text-gray-500 italic">No component selected</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="grid md:grid-cols-3 gap-6 mb-8">
+            <div class="bg-white rounded-lg shadow-md p-6 card">
+                <h3 class="text-xl font-bold text-gray-800 mb-3">Key Features</h3>
+                <ul class="list-disc pl-5 text-gray-700">
+                    <li class="mb-2">Multi-agent coordination for complex transport problems</li>
+                    <li class="mb-2">Real-time optimization of routes and schedules</li>
+                    <li class="mb-2">Integration with external APIs for live traffic and weather data</li>
+                    <li class="mb-2">Memory components for learning from past solutions</li>
+                    <li class="mb-2">Feedback loops for continuous improvement</li>
+                </ul>
+            </div>
+            
+            <div class="bg-white rounded-lg shadow-md p-6 card">
+                <h3 class="text-xl font-bold text-gray-800 mb-3">Use Cases</h3>
+                <ul class="list-disc pl-5 text-gray-700">
+                    <li class="mb-2">Fleet management and logistics optimization</li>
+                    <li class="mb-2">Multi-modal transport planning</li>
+                    <li class="mb-2">Last-mile delivery solutions</li>
+                    <li class="mb-2">Public transportation scheduling</li>
+                    <li class="mb-2">Emergency vehicle dispatch systems</li>
+                </ul>
+            </div>
+            
+            <div class="bg-white rounded-lg shadow-md p-6 card">
+                <h3 class="text-xl font-bold text-gray-800 mb-3">Technical Stack</h3>
+                <ul class="list-disc pl-5 text-gray-700">
+                    <li class="mb-2">LangGraph for workflow orchestration</li>
+                    <li class="mb-2">Large Language Models for reasoning</li>
+                    <li class="mb-2">Vector databases for knowledge retrieval</li>
+                    <li class="mb-2">External APIs for real-time data</li>
+                    <li class="mb-2">Optimization algorithms for route planning</li>
+                </ul>
+            </div>
+        </div>
+    </main>
+
+    <footer class="bg-gray-800 text-white py-6">
+        <div class="container mx-auto px-4 text-center">
+            <p>Demo MCP Web - LangGraph Transport Agent Diagram</p>
+            <p class="text-gray-400 text-sm mt-2">© 2025 Demo Project</p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Graph data for transport agent
+            const graphData = {
+                nodes: [
+                    { id: 1, name: "User Input Handler", type: "input", color: "#8B5CF6", details: "Processes and normalizes user requests for transport planning. Extracts key parameters such as origin, destination, constraints, preferences, and priorities. Converts natural language to structured format." },
+                    { id: 2, name: "Query Planner", type: "process", color: "#4F46E5", details: "Analyzes the user request and determines which services and data sources need to be consulted. Creates an execution plan that optimizes for accuracy and response time." },
+                    { id: 3, name: "Route Optimizer", type: "process", color: "#10B981", details: "Sophisticated algorithm that calculates optimal routes based on multiple factors including distance, time, cost, and emissions. Considers historical traffic patterns and constraints." },
+                    { id: 4, name: "Traffic Data Service", type: "data", color: "#F59E0B", details: "Connects to external APIs to obtain real-time traffic conditions, road closures, and congestion levels. Updates route calculations with current conditions." },
+                    { id: 5, name: "Weather Impact Analyzer", type: "process", color: "#EC4899", details: "Assesses how current and forecasted weather conditions might affect transport times and route safety. Adjusts route recommendations accordingly." },
+                    { id: 6, name: "Multi-Modal Coordinator", type: "process", color: "#06B6D4", details: "Specializes in connecting different transport modes (walking, cycling, public transit, ride-sharing, etc.) to create seamless journey plans." },
+                    { id: 7, name: "Carbon Footprint Calculator", type: "process", color: "#059669", details: "Calculates estimated emissions for different route and transport mode options. Provides data for environmentally-conscious decision making." },
+                    { id: 8, name: "Cost Optimizer", type: "process", color: "#EF4444", details: "Factors in various costs including fuel, tolls, public transport fares, and time value to calculate the most economical options." },
+                    { id: 9, name: "Response Generator", type: "output", color: "#6366F1", details: "Transforms optimized routes and plans into user-friendly explanations. Creates visualizations and step-by-step instructions." },
+                    { id: 10, name: "Transport Knowledge Base", type: "data", color: "#8B5CF6", details: "Vector database storing transport-related information including schedules, typical times, service disruptions, and transport options." },
+                    { id: 11, name: "Execution Monitor", type: "process", color: "#2563EB", details: "Tracks the execution of the transport plan in real-time, detecting deviations and triggering replanning when necessary." },
+                    { id: 12, name: "Historical Performance Memory", type: "data", color: "#9333EA", details: "Stores past transport plans and their outcomes to improve future recommendations. Learns from successes and failures." }
+                ],
+                edges: [
+                    { source: 1, target: 2, label: "Request" },
+                    { source: 2, target: 3, label: "Planning" },
+                    { source: 3, target: 4, label: "Get traffic" },
+                    { source: 3, target: 5, label: "Check weather" },
+                    { source: 3, target: 6, label: "Coordinate" },
+                    { source: 3, target: 7, label: "Calculate emissions" },
+                    { source: 3, target: 8, label: "Optimize cost" },
+                    { source: 6, target: 10, label: "Query" },
+                    { source: 2, target: 10, label: "Lookup" },
+                    { source: 3, target: 9, label: "Send results" },
+                    { source: 6, target: 9, label: "Send options" },
+                    { source: 8, target: 9, label: "Cost info" },
+                    { source: 7, target: 9, label: "Carbon data" },
+                    { source: 9, target: 11, label: "Monitor" },
+                    { source: 11, target: 3, label: "Replan if needed" },
+                    { source: 11, target: 12, label: "Record" },
+                    { source: 12, target: 3, label: "Improve" },
+                    { source: 12, target: 2, label: "Learn" }
+                ]
+            };
+
+            // Initialize the graph
+            const width = document.getElementById('graph-container').clientWidth;
+            const height = 500;
+            
+            // Create SVG container
+            const svg = d3.select('#graph-container')
+                .append('svg')
+                .attr('width', width)
+                .attr('height', height);
+            
+            // Create tooltip
+            const tooltip = d3.select("#tooltip");
+            
+            // Define arrow markers for directed edges
+            svg.append('defs').append('marker')
+                .attr('id', 'arrowhead')
+                .attr('viewBox', '-0 -5 10 10')
+                .attr('refX', 20)
+                .attr('refY', 0)
+                .attr('orient', 'auto')
+                .attr('markerWidth', 6)
+                .attr('markerHeight', 6)
+                .attr('xoverflow', 'visible')
+                .append('svg:path')
+                .attr('d', 'M 0,-5 L 10 ,0 L 0,5')
+                .attr('fill', '#999')
+                .style('stroke', 'none');
+            
+            // Create force simulation
+            const simulation = d3.forceSimulation(graphData.nodes)
+                .force('link', d3.forceLink(graphData.edges).id(d => d.id).distance(120))
+                .force('charge', d3.forceManyBody().strength(-500))
+                .force('center', d3.forceCenter(width / 2, height / 2))
+                .force('collision', d3.forceCollide().radius(60));
+            
+            // Create edges
+            const edges = svg.append('g')
+                .selectAll('path')
+                .data(graphData.edges)
+                .enter()
+                .append('path')
+                .attr('class', 'edge')
+                .attr('stroke', '#999')
+                .attr('marker-end', 'url(#arrowhead)');
+            
+            // Create edge labels
+            const edgeLabels = svg.append('g')
+                .selectAll('text')
+                .data(graphData.edges)
+                .enter()
+                .append('text')
+                .attr('class', 'edge-label')
+                .attr('fill', '#666')
+                .attr('dy', -5)
+                .text(d => d.label);
+            
+            // Create nodes
+            const nodeGroups = svg.append('g')
+                .selectAll('g')
+                .data(graphData.nodes)
+                .enter()
+                .append('g')
+                .attr('class', 'node')
+                .call(d3.drag()
+                    .on('start', dragstarted)
+                    .on('drag', dragged)
+                    .on('end', dragended));
+            
+            // Add circles for nodes
+            nodeGroups.append('circle')
+                .attr('r', 32)
+                .attr('fill', d => d.color)
+                .attr('stroke', '#fff')
+                .attr('stroke-width', 2);
+            
+            // Add labels for nodes
+            nodeGroups.append('text')
+                .attr('class', 'node-label')
+                .attr('text-anchor', 'middle')
+                .attr('dy', 4)
+                .attr('fill', '#fff')
+                .text(d => d.name.split(' ').slice(0, 2).join(' '));
+            
+            // Node interactions
+            nodeGroups
+                .on('mouseover', function(event, d) {
+                    d3.select(this).select('circle')
+                        .transition()
+                        .duration(300)
+                        .attr('r', 36);
+                    
+                    tooltip.style('opacity', 1)
+                        .html(`<strong>${d.name}</strong><br>${d.details.split('.')[0]}.`)
+                        .style('left', (event.pageX + 10) + 'px')
+                        .style('top', (event.pageY - 20) + 'px');
+                        
+                    // Highlight connected edges
+                    edges.classed('highlighted', e => e.source.id === d.id || e.target.id === d.id);
+                })
+                .on('mouseout', function() {
+                    d3.select(this).select('circle')
+                        .transition()
+                        .duration(300)
+                        .attr('r', 32);
+                    
+                    tooltip.style('opacity', 0);
+                    edges.classed('highlighted', false);
+                })
+                .on('click', function(event, d) {
+                    // Update info panel with node details
+                    d3.select('#node-details').html(`
+                        <h4 class="text-lg font-bold text-purple-800 mb-2">${d.name}</h4>
+                        <p class="text-gray-700 mb-3">${d.details}</p>
+                        <div class="bg-white p-2 rounded border border-purple-200">
+                            <h5 class="font-bold text-sm text-gray-700 mb-1">Component Type: ${d.type.charAt(0).toUpperCase() + d.type.slice(1)}</h5>
+                            <p class="text-sm text-gray-600">
+                                ${getComponentTypeDescription(d.type)}
+                            </p>
+                        </div>
+                    `);
+                    
+                    // Visual feedback for selection
+                    nodeGroups.selectAll('circle')
+                        .attr('stroke-width', 2)
+                        .attr('stroke', '#fff');
+                    
+                    d3.select(this).select('circle')
+                        .attr('stroke-width', 3)
+                        .attr('stroke', '#FFD700');
+                });
+            
+            // Update positions on each tick of the simulation
+            simulation.on('tick', () => {
+                // Update edge positions
+                edges.attr('d', d => {
+                    const dx = d.target.x - d.source.x;
+                    const dy = d.target.y - d.source.y;
+                    const dr = Math.sqrt(dx * dx + dy * dy);
+                    
+                    // Keep nodes within bounds
+                    d.source.x = Math.max(40, Math.min(width - 40, d.source.x));
+                    d.source.y = Math.max(40, Math.min(height - 40, d.source.y));
+                    d.target.x = Math.max(40, Math.min(width - 40, d.target.x));
+                    d.target.y = Math.max(40, Math.min(height - 40, d.target.y));
+                    
+                    return `M${d.source.x},${d.source.y}A${dr},${dr} 0 0,1 ${d.target.x},${d.target.y}`;
+                });
+                
+                // Update edge label positions
+                edgeLabels.attr('transform', d => {
+                    const midpoint = getMidpoint(d.source, d.target);
+                    return `translate(${midpoint.x}, ${midpoint.y})`;
+                });
+                
+                // Update node positions
+                nodeGroups.attr('transform', d => `translate(${d.x}, ${d.y})`);
+            });
+            
+            // Helper function to calculate edge midpoint
+            function getMidpoint(source, target) {
+                return {
+                    x: (source.x + target.x) / 2,
+                    y: (source.y + target.y) / 2
+                };
+            }
+            
+            // Drag functions
+            function dragstarted(event, d) {
+                if (!event.active) simulation.alphaTarget(0.3).restart();
+                d.fx = d.x;
+                d.fy = d.y;
+            }
+            
+            function dragged(event, d) {
+                d.fx = event.x;
+                d.fy = event.y;
+            }
+            
+            function dragended(event, d) {
+                if (!event.active) simulation.alphaTarget(0);
+                d.fx = null;
+                d.fy = null;
+            }
+            
+            // Helper function for component type descriptions
+            function getComponentTypeDescription(type) {
+                const descriptions = {
+                    'input': 'Handles incoming data and user requests, transforming them into formats usable by the system.',
+                    'process': 'Performs computational tasks, transformations, or decisions based on input data.',
+                    'data': 'Stores, retrieves, or manages information used by other components in the system.',
+                    'output': 'Formats and delivers results back to users or external systems in an appropriate form.'
+                };
+                return descriptions[type] || '';
+            }
+            
+            // Responsive resizing
+            window.addEventListener('resize', function() {
+                const newWidth = document.getElementById('graph-container').clientWidth;
+                svg.attr('width', newWidth);
+                simulation.force('center', d3.forceCenter(newWidth / 2, height / 2)).alpha(0.3).restart();
+            });
+        });
+    </script>
+</body>
+</html>
