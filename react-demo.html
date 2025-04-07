@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>React Demo Documentation</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+    <style>
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        pre {
+            background-color: #f8f8f8;
+            border-radius: 4px;
+            padding: 1rem;
+            overflow-x: auto;
+        }
+        code {
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .image-container img {
+            max-width: 100%;
+            height: auto;
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Header -->
+    <header class="gradient-bg text-white py-10">
+        <div class="container mx-auto px-4 text-center">
+            <h1 class="text-4xl font-bold mb-2">React Demo Documentation</h1>
+            <p class="text-xl">A comprehensive guide to creating React applications with a single codebase for multiple platforms</p>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-4 py-8">
+        <div class="max-w-4xl mx-auto bg-white rounded-lg shadow-md p-8">
+            
+            <!-- Introduction -->
+            <section class="mb-10">
+                <h2 class="text-2xl font-bold mb-4 text-indigo-700">Introduction</h2>
+                <p class="mb-4">React is a JavaScript library for building user interfaces that allows developers to create large web applications that can update without reloading the page. React Native extends this capability to mobile app development, enabling you to build native apps for Android and iOS using the same codebase.</p>
+                <p>This documentation provides an overview of how to use React and React Native with a shared Git repository to develop applications that work across web, iOS, and Android platforms.</p>
+            </section>
+
+            <!-- Architecture Overview -->
+            <section class="mb-10">
+                <h2 class="text-2xl font-bold mb-4 text-indigo-700">Architecture Overview</h2>
+                <p class="mb-4">A typical React/React Native multi-platform architecture involves:</p>
+                <div class="image-container mb-6">
+                    <img src="https://via.placeholder.com/800x400" alt="React Architecture Diagram" class="mb-2 rounded-lg shadow">
+                    <p class="text-sm text-gray-600 italic">React Native Architecture with shared codebase for multiple platforms</p>
+                </div>
+                <ul class="list-disc ml-6 mb-4 space-y-2">
+                    <li><strong>Shared Codebase:</strong> Business logic, state management, and UI components that work across platforms</li>
+                    <li><strong>Platform-Specific Code:</strong> Code that needs custom implementations for each platform</li>
+                    <li><strong>Native Bridges:</strong> Communication layers between JavaScript and native platform code</li>
+                </ul>
+            </section>
+
+            <!-- Getting Started -->
+            <section class="mb-10">
+                <h2 class="text-2xl font-bold mb-4 text-indigo-700">Getting Started</h2>
+                <p class="mb-4">To create a new React Native project with web support:</p>
+                <pre><code>// Install the React Native CLI
+npm install -g react-native-cli
+
+// Create a new React Native project
+npx react-native init MyAwesomeApp
+
+// Add web support
+cd MyAwesomeApp
+npm install --save react-dom react-native-web
+npm install --save-dev @babel/core babel-plugin-module-resolver</code></pre>
+
+                <p class="mt-4 mb-2">Project structure:</p>
+                <pre><code>MyAwesomeApp/
+├── android/            # Android-specific code
+├── ios/                # iOS-specific code
+├── src/
+│   ├── components/     # Shared UI components
+│   ├── screens/        # Screen components
+│   │   ├── Home.js     # Shared home screen
+│   │   ├── Home.ios.js # iOS-specific override
+│   │   └── Home.web.js # Web-specific override
+│   └── services/       # Business logic, API calls
+├── web/                # Web-specific entry point
+├── App.js              # Main app component
+└── index.js            # Entry point</code></pre>
+            </section>
+
+            <!-- Code Sharing Strategy -->
+            <section class="mb-10">
+                <h2 class="text-2xl font-bold mb-4 text-indigo-700">Code Sharing Strategy</h2>
+                <p class="mb-4">Here are some strategies for sharing code across platforms:</p>
+                
+                <h3 class="text-xl font-semibold mb-2 text-indigo-600">1. Platform-Specific File Extensions</h3>
+                <p class="mb-4">React Native automatically picks the right file based on platform:</p>
+                <pre><code>// Button.js - Default implementation
+// Button.ios.js - iOS-specific implementation
+// Button.android.js - Android-specific implementation
+// Button.web.js - Web-specific implementation</code></pre>
+
+                <h3 class="text-xl font-semibold mt-6 mb-2 text-indigo-600">2. Platform Module</h3>
+                <p class="mb-4">Use the Platform module for conditional code:</p>
+                <pre><code>import { Platform } from 'react-native';
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    ...Platform.select({
+      ios: {
+        backgroundColor: 'red',
+      },
+      android: {
+        backgroundColor: 'blue',
+      },
+      web: {
+        backgroundColor: 'green',
+      },
+      default: {
+        backgroundColor: 'gray',
+      },
+    }),
+  },
+});</code></pre>
+
+                <h3 class="text-xl font-semibold mt-6 mb-2 text-indigo-600">3. Higher-Order Components</h3>
+                <p class="mb-4">Wrap components with platform-specific behavior:</p>
+                <pre><code>// withPlatformSpecificBehavior.js
+const withPlatformSpecificBehavior = (Component) => {
+  return props => {
+    // Add platform-specific behavior here
+    return <Component {...props} />;
+  };
+};
+
+export default withPlatformSpecificBehavior;</code></pre>
+            </section>
+
+            <!-- Git Repository Management -->
+            <section class="mb-10">
+                <h2 class="text-2xl font-bold mb-4 text-indigo-700">Git Repository Management</h2>
+                <p class="mb-4">Best practices for managing your shared repository:</p>
+                <ul class="list-disc ml-6 mb-4 space-y-2">
+                    <li><strong>Branch Strategy:</strong> Use <code>main</code> for stable code, feature branches for development, and platform-specific branches when needed.</li>
+                    <li><strong>Monorepo Structure:</strong> Consider using a monorepo tool like Lerna or Yarn Workspaces for more complex applications.</li>
+                    <li><strong>CI/CD Setup:</strong> Configure separate build pipelines for each platform but trigger them from the same code changes.</li>
+                </ul>
+                <p>Example <code>.gitignore</code> file for React Native projects:</p>
+                <pre><code># OSX
+.DS_Store
+
+# Xcode
+build/
+*.pbxuser
+
+# Android/IntelliJ
+build/
+.gradle
+local.properties
+
+# node.js
+node_modules/
+npm-debug.log
+
+# Web
+/web/build
+
+# BUCK
+buck-out/
+
+# Bundle artifacts
+*.jsbundle
+
+# CocoaPods
+/ios/Pods/</code></pre>
+            </section>
+
+            <!-- Common Challenges -->
+            <section class="mb-10">
+                <h2 class="text-2xl font-bold mb-4 text-indigo-700">Common Challenges</h2>
+                <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 mb-6">
+                    <h3 class="text-lg font-semibold mb-2">Navigation</h3>
+                    <p>Navigation patterns differ between web and mobile. Consider using React Navigation with web extensions.</p>
+                </div>
+                <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 mb-6">
+                    <h3 class="text-lg font-semibold mb-2">Styling</h3>
+                    <p>Styling approaches vary. Use a library like styled-components that works well across platforms.</p>
+                </div>
+                <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4">
+                    <h3 class="text-lg font-semibold mb-2">Native Features</h3>
+                    <p>Some features require platform-specific implementations. Use a consistent abstraction layer for camera, geolocation, etc.</p>
+                </div>
+            </section>
+
+            <!-- Example Component -->
+            <section>
+                <h2 class="text-2xl font-bold mb-4 text-indigo-700">Example Component</h2>
+                <p class="mb-4">Here's a simple cross-platform button component:</p>
+                <pre><code>// CrossPlatformButton.js
+import React from 'react';
+import { TouchableOpacity, Text, StyleSheet, Platform } from 'react-native';
+
+const CrossPlatformButton = ({ title, onPress }) => {
+  return (
+    <TouchableOpacity style={styles.button} onPress={onPress}>
+      <Text style={styles.text}>{title}</Text>
+    </TouchableOpacity>
+  );
+};
+
+const styles = StyleSheet.create({
+  button: {
+    backgroundColor: '#4F46E5',
+    padding: 15,
+    borderRadius: 5,
+    alignItems: 'center',
+    ...Platform.select({
+      web: {
+        cursor: 'pointer',
+        outline: 'none',
+        transition: 'background-color 0.3s',
+      },
+      ios: {
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.1,
+        shadowRadius: 2,
+      },
+      android: {
+        elevation: 2,
+      },
+    }),
+  },
+  text: {
+    color: 'white',
+    fontWeight: 'bold',
+    fontSize: 16,
+  },
+});
+
+export default CrossPlatformButton;</code></pre>
+
+                <p class="mt-6 mb-4">Usage example:</p>
+                <pre><code>import React from 'react';
+import { View } from 'react-native';
+import CrossPlatformButton from './CrossPlatformButton';
+
+const MyScreen = () => {
+  return (
+    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+      <CrossPlatformButton 
+        title="Press Me!" 
+        onPress={() => alert('Button pressed!')} 
+      />
+    </View>
+  );
+};
+
+export default MyScreen;</code></pre>
+            </section>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-4 text-center">
+        <p>&copy; 2025 React Demo Documentation</p>
+    </footer>
+</body>
+</html>
